@@ -42,7 +42,17 @@ detach_package = function(pkg, character.only = FALSE) { if(!character.only) { p
 
 ## Life Expectancy EDA
 
-```{r loadData}
+```{r loadData, include ="F"}
 life <- read.csv("LifeExpectancyData.csv")
-
+life
 ```
+
+### Life expectancy distribution across all nations 
+```{r plots}
+loadPkg("ggplot2")
+ggplot(life, aes(x=Life.expectancy) )+
+  geom_histogram(color="darkblue",fill="lightblue")+
+  ggtitle("Histogram Distribution of Life Expectancy")+
+  xlab("Life Expectancy (Age)")
+```
+
