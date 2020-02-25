@@ -52,7 +52,9 @@ life
 loadPkg("ggplot2")
 ggplot(life, aes(x=Life.expectancy) )+
   geom_histogram(color="darkblue",fill="lightblue")+
-  ggtitle("Histogram Distribution of Life Expectancy")+
+  ggtitle("Life Expectancy Histogram")+
   xlab("Life Expectancy (Age)")
+
+qqnorm(life$Life.expectancy, main="Life Expectancy Q-Q Plot", ylab="Life Expectancy (Age)")
 ```
 
