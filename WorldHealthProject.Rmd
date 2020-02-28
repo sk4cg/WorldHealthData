@@ -58,9 +58,10 @@ ggplot(life, aes(x=Life.expectancy) )+
 qqnorm(life$Life.expectancy, main="Life Expectancy Q-Q Plot", ylab="Life Expectancy (Age)")
 ```
 
-###Correlation
+### Correlation
 
 ```{r correlation, include=T}
+library(dplyr)
 sapply(life, class) #look at the class of each variables
 life_nofactor = select(life, -c(Country, Status)) #remove the factor variables
 cor_life=cor(na.omit(life_nofactor)) #create correlation matrix
@@ -70,26 +71,31 @@ corrplot(cor_life) #plot correlation matrix
 ```
 
 
-###Associatin of Life Expectancy with Factor Variables
+### Associatin of Life Expectancy with Factor Variables
 
 ``` {r factor variables, include=T}
 #summary(life)
 life_developed=na.omit(subset(life, Status=='Developed')) #subset of countries that are Developed
 life_developing=na.omit(subset(life, Status=='Developing')) #subset of countries that are Developing
 status_ttest = t.test(life_developed$Life.expectancy, life_developing$Life.expectancy, alternative = "two.sided", var.equal = FALSE) #t-test to determine if the life expectancy of the two groups is different
-status_ttest
+status_ttest #Life expectancy of Developed/Developing are different as p<<0.05
 
-#make overlaying histograms of the two subgroups
-library(ggplot2)
-library(dplyr)
-life_hist=ggplot(life,aes(x=Life.expectancy)) + 
-    geom_histogram(data=subset(life,Status == 'Developed'),fill = "red", alpha = 0.4) +
-    geom_histogram(data=subset(life,Status == 'Developing'),fill = "blue", alpha = 0.4) +
-    labs(x="Life Expectancy")+
-    ggtitle("Life Expectancy of Developed vs Developing Countries") +
-    theme(legend.position="top")
-    
-life_hist
+#Use Chi-squared test to determine if Life Expectancy is independent of Developed/Developing
+contable = table(life$Life.expectancy, life$Status)
+chitest = chisq.test(contable)
+chitest  #Not independent as p<<0.05
+
+#make overlaying histograms of the two subgroups aes(x = rank, y = gpa, fill = admit)
+# First distribution
+hist(life_developing$Life.expectancy, col=rgb(1,0,0,0.5), xlab="Life Expectancy", 
+     ylab="Count", main="Life Expectancy of Developed vs Developing Countries" )
+
+# Second with add=T to plot on top
+hist(life_developed$Life.expectancy, col=rgb(0,0,1,0.5), add=T)
+
+# Add legend
+legend("topright", legend=c("Developing","Developed"), col=c(rgb(1,0,0,0.5), 
+     rgb(0,0,1,0.5)), pt.cex=2, pch=15 )
 
 #Variables most highly correlated to life expectacy were Income.composition.of.resources and Schooling. Though BMI and Aids had highish correlations. Adult mortality was highly correlated with life expectancy, but the reasons are obvious, so they will not be evaluated here. 
 #These all compare the differences in means between the developing and developed countries
@@ -116,13 +122,26 @@ developing_BMI
   
 developed_AIDS
 developing_AIDS
+
+
+
 ```
 
-###Is Life Expectancy Increasing?
+### Is Life Expectancy Increasing?
 
 ```{r Over the Years, include=T}
-
-
+library(ggplot2)
+theme_set(
+  theme_bw() +
+    theme(legend.position = "top")
+  )
+b <- ggplot(life, aes(x = life$Year, y = life$Life.expectancy))
+b + geom_point()
+b + geom_point(aes(shape = life$Status, color = life$Status)) +
+  scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))+
+  xlab('Year')+
+  ylab('Life Expectancy')+
+  ggtitle('Life Expectancy Year 2000-2015')
 
 ```
 
