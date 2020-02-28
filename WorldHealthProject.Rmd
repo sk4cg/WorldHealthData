@@ -58,3 +58,73 @@ ggplot(life, aes(x=Life.expectancy) )+
 qqnorm(life$Life.expectancy, main="Life Expectancy Q-Q Plot", ylab="Life Expectancy (Age)")
 ```
 
+###Correlation
+
+```{r correlation, include=T}
+sapply(life, class) #look at the class of each variables
+life_nofactor = select(life, -c(Country, Status)) #remove the factor variables
+cor_life=cor(na.omit(life_nofactor)) #create correlation matrix
+library(corrplot)
+corrplot(cor_life) #plot correlation matrix
+
+```
+
+
+###Associatin of Life Expectancy with Factor Variables
+
+``` {r factor variables, include=T}
+#summary(life)
+life_developed=na.omit(subset(life, Status=='Developed')) #subset of countries that are Developed
+life_developing=na.omit(subset(life, Status=='Developing')) #subset of countries that are Developing
+status_ttest = t.test(life_developed$Life.expectancy, life_developing$Life.expectancy, alternative = "two.sided", var.equal = FALSE) #t-test to determine if the life expectancy of the two groups is different
+status_ttest
+
+#make overlaying histograms of the two subgroups
+library(ggplot2)
+library(dplyr)
+life_hist=ggplot(life,aes(x=Life.expectancy)) + 
+    geom_histogram(data=subset(life,Status == 'Developed'),fill = "red", alpha = 0.4) +
+    geom_histogram(data=subset(life,Status == 'Developing'),fill = "blue", alpha = 0.4) +
+    labs(x="Life Expectancy")+
+    ggtitle("Life Expectancy of Developed vs Developing Countries") +
+    theme(legend.position="top")
+    
+life_hist
+
+#Variables most highly correlated to life expectacy were Income.composition.of.resources and Schooling. Though BMI and Aids had highish correlations. Adult mortality was highly correlated with life expectancy, but the reasons are obvious, so they will not be evaluated here. 
+#These all compare the differences in means between the developing and developed countries
+developed_income= mean(life_developed$Income.composition.of.resources)
+developing_income=mean(life_developing$Income.composition.of.resources)
+  
+developed_school=mean(life_developed$Schooling)
+developing_school=mean(life_developing$Schooling)
+
+developed_BMI=mean(life_developed$BMI)
+developing_BMI=mean(life_developing$BMI)
+  
+developed_AIDS=mean(life_developed$HIV.AIDS)
+developing_AIDS=mean(life_developing$HIV.AIDS)
+
+developed_income
+developing_income
+  
+developed_school
+developing_school
+
+developed_BMI
+developing_BMI
+  
+developed_AIDS
+developing_AIDS
+```
+
+###Is Life Expectancy Increasing?
+
+```{r Over the Years, include=T}
+
+
+
+```
+
+
+kskd
