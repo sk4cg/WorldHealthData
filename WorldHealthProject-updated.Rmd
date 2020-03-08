@@ -1,0 +1,184 @@
+---
+title: "WorldHealthData"
+author: "Sneha, RyeAnne, Ben, Yuqi"
+date: "2/19/2020"
+output:
+  html_document:
+    code_folding: hide
+    # number_sections: true
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+---
+
+```{r setup, include=FALSE}
+# some of common options (and the defaults) are: 
+# include=T, eval=T, echo=T, results='hide'/'asis',..., collapse=F, warning=T, message=T, error=T, cache=T, fig.width=6, fig.height=4, fig.dim=c(6,4) #inches, fig.align='left'/'center','right', 
+# knitr::opts_chunk$set(warning = F, results = T, message = F)
+knitr::opts_chunk$set(warning = F, results = F, message = F)
+# knitr::opts_chunk$set(include = F)
+# knitr::opts_chunk$set(echo = TRUE)
+options(scientific=T, digits = 3) 
+# options(scipen=9, digits = 3) 
+# ‘scipen’: integer. A penalty to be applied when deciding to print numeric values in fixed or exponential notation.  Positive values bias towards fixed and negative towards scientific notation: fixed notation will be preferred unless it is more than ‘scipen’ digits wider.
+# use scipen=999 to prevent scientific notation at all times
+```
+
+```{r basicfcn, include=F}
+# use this function to conveniently load libraries and work smoothly with knitting
+# can add quietly=T option to the require() function
+# note that using this function requires quotes around the package name, as you would when installing packages.
+loadPkg = function(x) { if (!require(x,character.only=T, quietly =T)) { install.packages(x,dep=T,repos="http://cran.us.r-project.org"); if(!require(x,character.only=T)) stop("Package not found") } }
+# unload/detact package when done using it 
+detach_package = function(pkg, character.only = FALSE) { if(!character.only) { pkg <- deparse(substitute(pkg)) } 
+  search_item <- paste("package", pkg,sep = ":") 
+  while(search_item %in% search()) { detach(search_item, unload = TRUE, character.only = TRUE) } 
+}
+loadPkg("ggplot2")
+```
+
+
+## Life Expectancy EDA
+
+```{r loadData, include ="F"}
+life <- read.csv("LifeExpectancyData.csv")
+life
+```
+
+### Life expectancy distributions 
+```{r plots}
+life2 <- na.omit(life) #omit missing values 
+
+loadPkg("ggplot2")
+ggplot(life, aes(x=Life.expectancy) )+
+  geom_histogram(color="darkblue",fill="lightblue")+
+  ggtitle("Life Expectancy Histogram")+
+  xlab("Life Expectancy (Age)")
+
+qqnorm(life$Life.expectancy, main="Life Expectancy Q-Q Plot", ylab="Life Expectancy (Age)")
+qqline(life$Life.expectancy)
+
+#ggplot(life2, aes(x=Total.expenditure, y=Life.expectancy, fill=Total.expenditure, group = 1)) + geom_boxplot() + scale_fill_brewer(palette="Spectral") + ggtitle("Life Expectancy vs. Total Expenditure") + ylab("Life Expectancy") + xlab("Total Expenditure ($)") 
+
+ggplot(life, aes(x=Year, y=Life.expectancy, col=Status))+
+  geom_point() +
+  geom_smooth() + 
+  facet_wrap(~Status)
+
+ggplot(life, aes(x=factor(Year), y=Life.expectancy))+
+  geom_boxplot() + 
+  facet_wrap(~Status) + 
+  theme(axis.text.x = element_text(angle = 90))
+
+plot(life$Life.expectancy, life$Total.expenditure, main="Total Govt Expenditure (y) vs Life Expectancy (x) ",
+   xlab="Life Expectancy ", ylab="Total Govt Expenditure on Healthcare ", pch=19) + 
+  abline(lm(life$Total.expenditure~life$Life.expectancy), col="red") # regression line (y~x)
+```
+
+### Descriptive Statistics
+```{r plots}
+#sapply(life, mean, na.rm=TRUE) # excluding missing values
+#sapply(life, sd)
+summary(life)
+```
+
+### Correlation
+
+```{r correlation, include=T}
+library(dplyr)
+sapply(life, class) #look at the class of each variables
+life_nofactor = select(life, -c(Country, Status)) #remove the factor variables
+cor_life=cor(na.omit(life_nofactor)) #create correlation matrix
+library(corrplot)
+corrplot(cor_life, type="lower") #plot correlation matrix
+ggplot(life, aes(x=GDP, y=percentage.expenditure)) + 
+  geom_point() + 
+  geom_smooth()
+ggplot(life, aes(x=HIV.AIDS, y=Life.expectancy)) + 
+  geom_point() + 
+  geom_smooth()
+ggplot(life, aes(x=Schooling, y=Life.expectancy)) + 
+  geom_point() + 
+  geom_smooth()
+```
+
+
+### Associatin of Life Expectancy with Factor Variables
+
+``` {r factor variables, include=T}
+#summary(life)
+life_developed=na.omit(subset(life, Status=='Developed')) #subset of countries that are Developed
+life_developing=na.omit(subset(life, Status=='Developing')) #subset of countries that are Developing
+
+#Life expectancy of Developed/Developing are different as p<<0.05
+mean_life_developed = mean(life_developed$Life.expectancy)
+mean_life_developing = mean(life_developing$Life.expectancy)
+t_life_developed = t.test(x=life_developed$Life.expectancy, conf.level=0.95 )
+t_life_developing= t.test(x=life_developing$Life.expectancy, conf.level=0.95 )
+t_life_developed$conf.int
+t_life_developing$conf.int
+mean_life_developed
+mean_life_developing
+
+#Use Chi-squared test to determine if Life Expectancy is independent of Developed/Developing
+contable = table(life$Life.expectancy, life$Status)
+chitest = chisq.test(contable)
+chitest  #Not independent as p<<0.05
+
+#make overlaying histograms of the two subgroups aes(x = rank, y = gpa, fill = admit)
+# First distribution
+hist(life_developing$Life.expectancy, col=rgb(1,0,0,0.5), xlab="Life Expectancy", 
+     ylab="Proportion", main="Life Expectancy of Developed vs Developing Countries" , freq=F, 
+     ylim = c(0,0.15))
+# Second with add=T to plot on top
+hist(life_developed$Life.expectancy, col=rgb(0,0,1,0.5), add=T, freq=F)
+# Add legend
+legend("topright", legend=c("Developing","Developed"), col=c(rgb(1,0,0,0.5), 
+     rgb(0,0,1,0.5)), pt.cex=2, pch=15 )
+
+#Variables most highly correlated to life expectacy were Income.composition.of.resources and Schooling. Though BMI and Aids had highish correlations. Adult mortality was highly correlated with life expectancy, but the reasons are obvious, so they will not be evaluated here. 
+#These all compare the differences in means between the developing and developed countries
+developed_income= mean(life_developed$Income.composition.of.resources)
+developing_income=mean(life_developing$Income.composition.of.resources)
+developed_school=mean(life_developed$Schooling)
+developing_school=mean(life_developing$Schooling)
+developed_BMI=mean(life_developed$BMI)
+developing_BMI=mean(life_developing$BMI)
+developed_AIDS=mean(life_developed$HIV.AIDS)
+developing_AIDS=mean(life_developing$HIV.AIDS)
+
+developed_income
+developing_income
+developed_school
+developing_school
+developed_BMI
+developing_BMI
+developed_AIDS
+developing_AIDS
+
+
+
+```
+
+### Is Life Expectancy Increasing?
+
+```{r Over the Years, include=T}
+theme_set(
+  theme_bw() +
+    theme(legend.position = "top")
+  )
+b <- ggplot(life, aes(x = life$Year, y = life$Life.expectancy))
+b + geom_point()
+b + geom_point(aes(shape = life$Status, color = life$Status)) +
+  scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))+
+  xlab('Year')+
+  ylab('Life Expectancy')+
+  ggtitle('Life Expectancy Year 2000-2015')
+
+```
+
+
+kskd
