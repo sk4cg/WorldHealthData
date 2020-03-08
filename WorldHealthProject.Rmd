@@ -1,7 +1,7 @@
 ---
-title: "WorldHealthData"
+title: "Project One: Wasted Potential"
 author: "Sneha, RyeAnne, Ben, Yuqi"
-date: "2/19/2020"
+date: "11 March 2020"
 output:
   html_document:
     code_folding: hide
@@ -39,9 +39,7 @@ detach_package = function(pkg, character.only = FALSE) { if(!character.only) { p
 }
 ```
 
-
-## Life Expectancy EDA
-
+### Life expectancy EDA
 ```{r loadData, include ="F"}
 life <- read.csv("LifeExpectancyData.csv")
 life

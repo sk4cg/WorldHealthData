@@ -1,0 +1,262 @@
+---
+title: "Project One: Wasted Potential"
+author: "Sneha, RyeAnne, Ben, Yuqi"
+date: "11 March 2020"
+output:
+  html_document:
+    code_folding: hide
+    # number_sections: true
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+---
+
+```{r setup, include=FALSE}
+# some of common options (and the defaults) are: 
+# include=T, eval=T, echo=T, results='hide'/'asis',..., collapse=F, warning=T, message=T, error=T, cache=T, fig.width=6, fig.height=4, fig.dim=c(6,4) #inches, fig.align='left'/'center','right', 
+# knitr::opts_chunk$set(warning = F, results = T, message = F)
+knitr::opts_chunk$set(warning = F, results = F, message = F)
+# knitr::opts_chunk$set(include = F)
+# knitr::opts_chunk$set(echo = TRUE)
+options(scientific=T, digits = 3) 
+# options(scipen=9, digits = 3) 
+# ‘scipen’: integer. A penalty to be applied when deciding to print numeric values in fixed or exponential notation.  Positive values bias towards fixed and negative towards scientific notation: fixed notation will be preferred unless it is more than ‘scipen’ digits wider.
+# use scipen=999 to prevent scientific notation at all times
+```
+
+```{r basicfcn, include=F}
+# use this function to conveniently load libraries and work smoothly with knitting
+# can add quietly=T option to the require() function
+# note that using this function requires quotes around the package name, as you would when installing packages.
+loadPkg = function(x) { if (!require(x,character.only=T, quietly =T)) { install.packages(x,dep=T,repos="http://cran.us.r-project.org"); if(!require(x,character.only=T)) stop("Package not found") } }
+# unload/detact package when done using it 
+detach_package = function(pkg, character.only = FALSE) { if(!character.only) { pkg <- deparse(substitute(pkg)) } 
+  search_item <- paste("package", pkg,sep = ":") 
+  while(search_item %in% search()) { detach(search_item, unload = TRUE, character.only = TRUE) } 
+}
+```
+
+#### ______________________________________________________________________________
+
+#### **Summary of The Dataset**
+
+The dataset of choice for Project One was originally constructed by the World Health Organization (WHO) to track the health status of 193 countries across the world. The question we
+sought to answer is as follows: 
+
+**What factors affect life expectancy in individuals across the world?**
+
+The dataset includes a variety of factors that contribute to the overall health status of a country. We wanted to know what effect these factors had specifically 
+on life expectancy. An explanation of the different factors in this dataset are as follows: 
+
+  • **Country:** Country
+  
+  • **Year:** Year
+  
+  • **Status:** Developed or Developing status
+  
+  • **Life expectancy:** Life Expectancy in age
+  
+  • **Adult Mortality:** Adult Mortality Rates of both sexes (probability of dying between 15 and 60 years per 1000 population)
+  
+  • **Infant deaths:** Number of Infant Deaths per 1000 population
+  
+  • **Alcohol:** Alcohol, recorded per capita (15+) consumption (in litres of pure alcohol)
+  
+  • **Percentage expenditure:** Expenditure on health as a percentage of GDP per capita(%)
+  
+  • **Hepatitis B:** HepB immunization coverage among 1-year-olds (%)
+  
+  • **Measles:** Number of reported measles cases per 1000 population
+  
+  • **BMI:** Average Body Mass Index of entire population
+  
+  • **Under-five deaths:** Number of under-five deaths per 1000 population
+  
+  • **Polio:** Pol3 immunization coverage among 1-year-olds (%)
+  
+  • **Total expenditure:** General government expenditure on health as a percentage of total government expenditure (%)
+  
+  • **Diphtheria:** DTP3 immunization coverage among 1-year-olds (%)
+  
+  • **HIV/AIDS:** Deaths per 1 000 live births HIV/AIDS (0-4 years)
+  
+  • **GDP:** Gross Domestic Product per capita (in USD)
+  
+  • **Population:** Population of the country
+  
+  • **Thinness 10-19 years:** Prevalence of thinness among children/adolescents, age 10 - 19(%)
+  
+  • **Thinness 5-9 years:** Prevalence of thinness among children, age 5 to 9 (%)
+  
+  • **Income comp of resources:** HDI in terms of income composition of resources (index ranging from 0 to 1)
+  
+  • **Schooling:** Number of years of Schooling (years)
+
+Data Source: [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who)
+
+#### ______________________________________________________________________________
+
+#### **Descriptive Statistics**
+
+First, the dataset is read in using 'read.csv.'
+```{r loadData, include=F}
+life <- read.csv('LifeExpectancyData.csv')
+```
+
+Next, the structure of the dataset is computed. Please note that 'Year' was changed to 'factor' type.
+The names of the different variables were reformatted accordingly. 
+```{r structure, include=T}
+life$Year <- as.factor(life$Year)
+
+names(life)[4] <- "Life Expectancy"
+names(life)[5] <- "Adult Mortality"
+names(life)[6] <- "Infant Deaths"
+names(life)[8] <- "Percentage Expenditure"
+names(life)[9] <- "Hepatitis B"
+names(life)[12] <- "Under Five Deaths"
+names(life)[14] <- "Total Expenditure"
+names(life)[16] <- "HIV/AIDS"
+names(life)[19] <- "Thinness 10-19 Years"
+names(life)[20] <- "Thinness 5-9 Years"
+names(life)[21] <- "Income Comp of Resources"
+
+str(life)
+```
+
+Then, a variety of distributions is constructed to display the frequency and distribution of life expectancy across the dataset. Please note that the histogram of life expectancy
+is slightly left-skewed, as supported by the corresponding Q-Q Plot. The scatter plot of total government expenditure versus life expectancy yields roughly four clusters centered
+around ages 45, 55, 65, and 75 with expenditure values ranging from roughly 2 to 10. The regression line constructed shows a slight positive slope, although few of the values follow
+the trend of this line. 
+```{r plots1}
+life2 <- na.omit(life) #omit missing values 
+
+loadPkg("ggplot2")
+
+ggplot(life, aes(x=`Life Expectancy`) )+
+  geom_histogram(color="darkblue",fill="lightblue")+
+  ggtitle("Life Expectancy Histogram")+
+  theme(plot.title = element_text(hjust=0.5)) +
+  xlab("Life Expectancy (Age)") +
+  ylab("Frequency")
+
+qqnorm(life$`Life Expectancy`, main="Life Expectancy Q-Q Plot", ylab="Life Expectancy (Age)")
+
+
+#ggplot(life2, aes(x=Total.expenditure, y=Life.expectancy, fill=Total.expenditure, group = 1)) + geom_boxplot() + scale_fill_brewer(palette="Spectral") + ggtitle("Life Expectancy vs. Total Expenditure") + ylab("Life Expectancy") + xlab("Total Expenditure ($)") 
+
+plot(life$`Life Expectancy`, life$`Total Expenditure`, main="Total Government Expenditure (y) vs Life Expectancy (x) ",
+   xlab="Life Expectancy (Age)", ylab="Total Govt Expenditure on Healthcare", pch=19) + 
+  abline(lm(life$`Total Expenditure`~life$`Life Expectancy`), col="red") # regression line (y~x)
+```
+
+The summary statistics for each variable in the dataset are computed below. Please disregard the categorial (type: 'factor') variables ('Country,' 'Year,' and 'Status'), 
+as their summary statistics are meaningless. 
+```{r plots2}
+#sapply(life, mean, na.rm=TRUE) # excluding missing values
+#sapply(life, sd)
+summary(life)
+```
+
+A correlation plot of the different variables is printed below. Some notable takeways are listed below:
+
+  • 'Adult Mortality' has the strongest overall correlation with 'Life Expectancy' (roughly -0.70).
+  
+  • 'Income Composition of Resources' and 'Schooling' have strong positive correlations with 'Life Expectancy' (roughly 0.75).
+  
+  • 'HIV/AIDS' has a relatively strong negative correlation with 'Life Expectancy' (roughly 0.55).
+  
+  • 'Measles' and 'Population' have almost no correlation with 'Life Expectancy' (roughly 0). 
+
+```{r correlation, include=T}
+loadPkg("dplyr")
+
+sapply(life, class) #look at the class of each variables
+life_nofactor = select(life, -c(Country, Status, Year)) #remove the factor variables
+cor_life=cor(na.omit(life_nofactor)) #create correlation matrix
+
+loadPkg("corrplot")
+
+#corrplot(cor_life, method=c("number"), tl.cex = 0.75, number.cex = 7/ncol(life)) #plot correlation matrix
+corrplot(cor_life, tl.cex = 0.75, tl.col = "black")
+```
+
+
+An association of life expectancy with the different factor variables (Country, Status) is printed below. The association to 'Year' is in the next section. 
+``` {r factor variables, include=T}
+#summary(life)
+life_developed=na.omit(subset(life, Status=='Developed')) #subset of countries that are Developed
+life_developing=na.omit(subset(life, Status=='Developing')) #subset of countries that are Developing
+
+#Life expectancy of Developed/Developing are different as p<<0.05
+mean_life_developed = mean(life_developed$`Life Expectancy`)
+mean_life_developing = mean(life_developing$`Life Expectancy`)
+t_life_developed = t.test(x=life_developed$`Life Expectancy`, conf.level=0.95 )
+t_life_developing= t.test(x=life_developing$`Life Expectancy`, conf.level=0.95 )
+t_life_developed$conf.int
+t_life_developing$conf.int
+mean_life_developed
+mean_life_developing
+
+#Use Chi-squared test to determine if Life Expectancy is independent of Developed/Developing
+contable = table(life$`Life Expectancy`, life$Status)
+chitest = chisq.test(contable)
+chitest  #Not independent as p<<0.05
+
+#make overlaying histograms of the two subgroups aes(x = rank, y = gpa, fill = admit)
+# First distribution
+hist(life_developing$`Life Expectancy`, col=rgb(1,0,0,0.5), xlab="Life Expectancy", 
+     ylab="Count", main="Life Expectancy of Developed vs Developing Countries" )
+# Second with add=T to plot on top
+hist(life_developed$`Life Expectancy`, col=rgb(0,0,1,0.5), add=T)
+# Add legend
+legend("topright", legend=c("Developing","Developed"), col=c(rgb(1,0,0,0.5), 
+     rgb(0,0,1,0.5)), pt.cex=2, pch=15 )
+
+#Variables most highly correlated to life expectacy were Income.composition.of.resources and Schooling. Though BMI and Aids had highish correlations. Adult mortality was highly correlated with life expectancy, but the reasons are obvious, so they will not be evaluated here. 
+#These all compare the differences in means between the developing and developed countries
+developed_income= mean(life_developed$Income.composition.of.resources)
+developing_income=mean(life_developing$Income.composition.of.resources)
+developed_school=mean(life_developed$Schooling)
+developing_school=mean(life_developing$Schooling)
+developed_BMI=mean(life_developed$BMI)
+developing_BMI=mean(life_developing$BMI)
+developed_AIDS=mean(life_developed$HIV.AIDS)
+developing_AIDS=mean(life_developing$HIV.AIDS)
+
+developed_income
+developing_income
+developed_school
+developing_school
+developed_BMI
+developing_BMI
+developed_AIDS
+developing_AIDS
+
+
+
+```
+
+
+Plots were constructed below to test whether life expectancy was increasing between the years 2000-2015.
+```{r Over the Years, include=T}
+loadPkg("ggplot2")
+
+theme_set(
+  theme_bw() +
+    theme(legend.position = "top")
+  )
+b <- ggplot(life, aes(x = life$Year, y = life$`Life Expectancy`))
+b + geom_point()
+b + geom_point(aes(shape = life$Status, color = life$Status)) +
+  scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))+
+  xlab('Year')+
+  ylab('Life Expectancy')+
+  ggtitle('Life Expectancy Year 2000-2015')
+
+```
+
+
+kskd
