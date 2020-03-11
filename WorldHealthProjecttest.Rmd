@@ -106,11 +106,8 @@ First, the dataset is read in using 'read.csv.'
 life <- read.csv('LifeExpectancyData.csv')
 ```
 
-Next, the structure of the dataset is computed. Please note that 'Year' was changed to 'factor' type.
-The names of the different variables were reformatted accordingly. 
+Next, the structure of the dataset is computed. The names of the different variables were reformatted accordingly. 
 ```{r structure, include=T}
-life$Year <- as.factor(life$Year)
-
 names(life)[4] <- "Life Expectancy"
 names(life)[5] <- "Adult Mortality"
 names(life)[6] <- "Infant Deaths"
@@ -126,11 +123,24 @@ names(life)[21] <- "Income Comp of Resources"
 str(life)
 ```
 
-Then, a variety of distributions is constructed to display the frequency and distribution of life expectancy across the dataset. Please note that the histogram of life expectancy
-is slightly left-skewed, as supported by the corresponding Q-Q Plot. The scatter plot of total government expenditure versus life expectancy yields roughly four clusters centered
-around ages 45, 55, 65, and 75 with expenditure values ranging from roughly 2 to 10. The regression line constructed shows a slight positive slope, although few of the values follow
-the trend of this line. 
-```{r plots1}
+The summary statistics for each variable in the dataset are computed below. Please disregard the categorial (type: 'factor') 
+variables ('Country' and 'Status'), as their summary statistics are meaningless. 
+```{r plots2}
+#sapply(life, mean, na.rm=TRUE) # excluding missing values
+#sapply(life, sd)
+summary(life)
+```
+
+#### ______________________________________________________________________________
+
+#### **Graphical Representations of The Data**
+
+Then, a variety of distributions is constructed to display the frequency and distribution of life expectancy across the dataset. 
+Please note that the histogram of life expectancy is slightly left-skewed, as supported by the corresponding Q-Q Plot. 
+The scatter plot of total government expenditure versus life expectancy yields roughly four clusters centered around ages 
+45, 55, 65, and 75 with expenditure values ranging from roughly 2 to 10. The regression line constructed shows a slight positive 
+slope, although few of the values follow the trend of this line. 
+```{r plots_1, include=T}
 life2 <- na.omit(life) #omit missing values 
 
 loadPkg("ggplot2")
@@ -152,13 +162,286 @@ plot(life$`Life Expectancy`, life$`Total Expenditure`, main="Total Government Ex
   abline(lm(life$`Total Expenditure`~life$`Life Expectancy`), col="red") # regression line (y~x)
 ```
 
-The summary statistics for each variable in the dataset are computed below. Please disregard the categorial (type: 'factor') variables ('Country,' 'Year,' and 'Status'), 
-as their summary statistics are meaningless. 
-```{r plots2}
-#sapply(life, mean, na.rm=TRUE) # excluding missing values
-#sapply(life, sd)
-summary(life)
+Plots were constructed below to test whether life expectancy was increasing between the years 2000-2015.
+```{r Over the Years, include=T}
+loadPkg("ggplot2")
+
+theme_set(
+  theme_bw() +
+    theme(legend.position = "top")
+  )
+b <- ggplot(life, aes(x = life$Year, y = life$`Life Expectancy`))
+b + geom_point()
+b + geom_point(aes(shape = life$Status, color = life$Status)) +
+  scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))+
+  xlab('Year')+
+  ylab('Life Expectancy')+
+  ggtitle('Life Expectancy Year 2000-2015')
+
 ```
+
+## World Map
+
+# Subsetting and Pre-processing
+
+```{r subsetting, include=T}
+data <- read.csv("lifeexpectancydata.csv")
+
+data_world_map <- data.frame(data)
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'USA')
+data_world_map$Country[data_world_map$Country == 'United States of America'] <- 'USA'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'UK')
+data_world_map$Country[data_world_map$Country == 'United Kingdom of Great Britain and Northern Ireland'] <- 'UK'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Russia')
+data_world_map$Country[data_world_map$Country == 'Russian Federation'] <- 'Russia'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Bolivia')
+data_world_map$Country[data_world_map$Country == 'Bolivia (Plurinational State of)'] <- 'Bolivia'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Brunei')
+data_world_map$Country[data_world_map$Country == 'Brunei Darussalam'] <- 'Brunei'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Czech Republic')
+data_world_map$Country[data_world_map$Country == 'Czechia'] <- 'Czech Republic'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'North Korea')
+data_world_map$Country[data_world_map$Country == 'Democratic People\'s Republic of Korea'] <- 'North Korea'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Iran')
+data_world_map$Country[data_world_map$Country == 'Iran (Islamic Republic of)'] <- 'Iran'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Laos')
+data_world_map$Country[data_world_map$Country == 'Lao People\'s Democratic Republic'] <- 'Laos'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Micronesia')
+data_world_map$Country[data_world_map$Country == 'Micronesia (Federated States of)'] <- 'Micronesia'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'South Korea')
+data_world_map$Country[data_world_map$Country == 'Republic of Korea'] <- 'South Korea'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Moldova')
+data_world_map$Country[data_world_map$Country == 'Republic of Moldova'] <- 'Moldova'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Saint Vincent')
+data_world_map$Country[data_world_map$Country == 'Saint Vincent and the Grenadines'] <- 'Saint Vincent'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Syria')
+data_world_map$Country[data_world_map$Country == 'Syrian Arab Republic'] <- 'Syria'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Macedonia')
+data_world_map$Country[data_world_map$Country == 'The former Yugoslav republic of Macedonia'] <- 'Macedonia'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Tanzania')
+data_world_map$Country[data_world_map$Country == 'United Republic of Tanzania'] <- 'Tanzania'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Venezuela')
+data_world_map$Country[data_world_map$Country == 'Venezuela (Bolivarian Republic of)'] <- 'Venezuela'
+levels(data_world_map$Country) <- c(levels(data_world_map$Country), 'Vietnam')
+data_world_map$Country[data_world_map$Country == 'Viet Nam'] <- 'Vietnam'
+
+two_thousand <- subset(x=data_world_map, data_world_map$Year==2000)
+```
+
+# Combining and plotting LE data from the year 2000
+
+```{r combining_2000, include=T}
+loadPkg("ggmap")
+loadPkg("tidyverse")
+loadPkg("dplyr")
+
+world_data <- map_data('world')
+
+combined_2000 <- world_data[two_thousand$Country %in% two_thousand$Country, ]
+combined_2000$value <- two_thousand$Life.expectancy[match(combined_2000$region, two_thousand$Country)]
+
+countries <- unique(combined_2000$Country)
+cdf <- data.frame(label1=countries)
+for(i in cdf){
+  combined_2000$value <- ifelse(combined_2000$Country %in% cdf$label1[i], (two_thousand$Life.expectancy), combined_2000$value)
+}
+```
+
+```{r plotting_2000, include=T}
+ggplot(data=combined_2000, aes(x=long, y=lat, group=group, fill=value)) +
+  geom_polygon(colour="white") +
+  scale_fill_continuous(low="blue",
+                        high="orange",
+                        guide="colorbar") +
+  theme_bw() +
+  labs(fill="Life Expectancy", title="Life Expectancy Across the World (2000)", x="", y="") +
+  scale_y_continuous(breaks=c()) +
+  scale_x_continuous(breaks=c()) +
+  theme(panel.border=element_blank())
+```
+
+# Combining and plotting LE data from the year 2005
+
+```{r combining_2005, include=T}
+loadPkg("ggmap")
+loadPkg("tidyverse")
+loadPkg("dplyr")
+
+two_thousand_five <- subset(x=data_world_map, data_world_map$Year==2005)
+
+combined_2005 <- world_data[two_thousand_five$Country %in% two_thousand_five$Country, ]
+combined_2005$value <- two_thousand_five$Life.expectancy[match(combined_2005$region, two_thousand_five$Country)]
+
+countries <- unique(combined_2005$Country)
+cdf <- data.frame(label1=countries)
+for(i in cdf){
+  combined_2005$value <- ifelse(combined_2005$Country %in% cdf$label1[i], (two_thousand_five$Life.expectancy), combined_2005$value)
+}
+```
+
+```{r plotting_2005, include=T}
+ggplot(data=combined_2005, aes(x=long, y=lat, group=group, fill=value)) +
+  geom_polygon(colour="white") +
+  scale_fill_continuous(low="blue",
+                        high="orange",
+                        guide="colorbar") +
+  theme_bw() +
+  labs(fill="Life Expectancy", title="Life Expectancy Across the World (2005)", x="", y="") +
+  scale_y_continuous(breaks=c()) +
+  scale_x_continuous(breaks=c()) +
+  theme(panel.border=element_blank())
+```
+
+# Combining and plotting LE data from the year 2010
+
+```{r combining_2010, include=T}
+loadPkg("ggmap")
+loadPkg("tidyverse")
+loadPkg("dplyr")
+
+two_thousand_ten <- subset(x=data_world_map, data_world_map$Year==2010)
+
+combined_2010 <- world_data[two_thousand_ten$Country %in% two_thousand_ten$Country, ]
+combined_2010$value <- two_thousand_ten$Life.expectancy[match(combined_2010$region, two_thousand_ten$Country)]
+
+countries <- unique(combined_2010$Country)
+cdf <- data.frame(label1=countries)
+for(i in cdf){
+  combined_2010$value <- ifelse(combined_2010$Country %in% cdf$label1[i], (two_thousand_ten$Life.expectancy), combined_2010$value)
+}
+```
+
+```{r plotting_2010, include=T}
+ggplot(data=combined_2010, aes(x=long, y=lat, group=group, fill=value)) +
+  geom_polygon(colour="white") +
+  scale_fill_continuous(low="blue",
+                        high="orange",
+                        guide="colorbar") +
+  theme_bw() +
+  labs(fill="Life Expectancy", title="Life Expectancy Across the World (2010)", x="", y="") +
+  scale_y_continuous(breaks=c()) +
+  scale_x_continuous(breaks=c()) +
+  theme(panel.border=element_blank())
+```
+
+# Combining and plotting LE data from the year 2015
+
+```{r combining_2015, include=T}
+loadPkg("ggmap")
+loadPkg("tidyverse")
+loadPkg("dplyr")
+
+two_thousand_fifteen <- subset(x=data_world_map, data_world_map$Year==2015)
+
+combined_2015 <- world_data[two_thousand_fifteen$Country %in% two_thousand_fifteen$Country, ]
+combined_2015$value <- two_thousand_fifteen$Life.expectancy[match(combined_2015$region, two_thousand_fifteen$Country)]
+
+countries <- unique(combined_2015$Country)
+cdf <- data.frame(label1=countries)
+for(i in cdf){
+  combined_2015$value <- ifelse(combined_2015$Country %in% cdf$label1[i], (two_thousand_fifteen$Life.expectancy), combined_2015$value)
+}
+```
+
+```{r plotting_2015, include=T}
+ggplot(data=combined_2015, aes(x=long, y=lat, group=group, fill=value)) +
+  geom_polygon(colour="white") +
+  scale_fill_continuous(low="blue",
+                        high="orange",
+                        guide="colorbar") +
+  theme_bw() +
+  labs(fill="Life Expectancy", title="Life Expectancy Across the World (2015)", x="", y="") +
+  scale_y_continuous(breaks=c()) +
+  scale_x_continuous(breaks=c()) +
+  theme(panel.border=element_blank())
+```
+
+# Subsetting and Pre-processing for Mean Life Expectancy
+
+```{r aggregates, include=T}
+loadPkg("dplyr")
+
+data_le_means <- data.frame(data)
+
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'USA')
+data_le_means$Country[data_le_means$Country == 'United States of America'] <- 'USA'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'UK')
+data_le_means$Country[data_le_means$Country == 'United Kingdom of Great Britain and Northern Ireland'] <- 'UK'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Russia')
+data_le_means$Country[data_le_means$Country == 'Russian Federation'] <- 'Russia'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Bolivia')
+data_le_means$Country[data_le_means$Country == 'Bolivia (Plurinational State of)'] <- 'Bolivia'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Brunei')
+data_le_means$Country[data_le_means$Country == 'Brunei Darussalam'] <- 'Brunei'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Czech Republic')
+data_le_means$Country[data_le_means$Country == 'Czechia'] <- 'Czech Republic'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'North Korea')
+data_le_means$Country[data_le_means$Country == 'Democratic People\'s Republic of Korea'] <- 'North Korea'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Iran')
+data_le_means$Country[data_le_means$Country == 'Iran (Islamic Republic of)'] <- 'Iran'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Laos')
+data_le_means$Country[data_le_means$Country == 'Lao People\'s Democratic Republic'] <- 'Laos'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Micronesia')
+data_le_means$Country[data_le_means$Country == 'Micronesia (Federated States of)'] <- 'Micronesia'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'South Korea')
+data_le_means$Country[data_le_means$Country == 'Republic of Korea'] <- 'South Korea'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Moldova')
+data_le_means$Country[data_le_means$Country == 'Republic of Moldova'] <- 'Moldova'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Saint Vincent')
+data_le_means$Country[data_le_means$Country == 'Saint Vincent and the Grenadines'] <- 'Saint Vincent'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Syria')
+data_le_means$Country[data_le_means$Country == 'Syrian Arab Republic'] <- 'Syria'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Macedonia')
+data_le_means$Country[data_le_means$Country == 'The former Yugoslav republic of Macedonia'] <- 'Macedonia'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Tanzania')
+data_le_means$Country[data_le_means$Country == 'United Republic of Tanzania'] <- 'Tanzania'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Venezuela')
+data_le_means$Country[data_le_means$Country == 'Venezuela (Bolivarian Republic of)'] <- 'Venezuela'
+levels(data_le_means$Country) <- c(levels(data_le_means$Country), 'Vietnam')
+data_le_means$Country[data_le_means$Country == 'Viet Nam'] <- 'Vietnam'
+
+le_na = subset(data_le_means, is.na(Life.expectancy))
+le_clean = anti_join(data_le_means, le_na)
+
+country_and_status <- le_clean %>% group_by(Country, Status) %>% summarise(mean_le = mean(Life.expectancy))
+```
+
+# Combining and Plotting Mean LE across all years
+
+```{r combining_means, include=T}
+loadPkg("ggmap")
+loadPkg("tidyverse")
+loadPkg("dplyr")
+
+world_data <- map_data('world')
+
+combined_means <- world_data[country_and_status$Country %in% country_and_status$Country, ]
+combined_means$value <- country_and_status$mean_le[match(combined_means$region, country_and_status$Country)]
+
+countries <- unique(combined_means$Country)
+cdf <- data.frame(label1=countries)
+for(i in cdf){
+  combined_means$value <- ifelse(combined_means$Country %in% cdf$label1[i], (country_and_status$mean_le), combined_means$value)
+}
+```
+
+```{r plotting_mean_le, include=T}
+ggplot(data=combined_means, aes(x=long, y=lat, group=group, fill=value)) +
+  geom_polygon(colour="white") +
+  scale_fill_continuous(low="blue",
+                        high="orange",
+                        guide="colorbar") +
+  theme_bw() +
+  labs(fill="Life Expectancy", title="Mean Life Expectancy Across the World (2000-2015)", x="", y="") +
+  scale_y_continuous(breaks=c()) +
+  scale_x_continuous(breaks=c()) +
+  theme(panel.border=element_blank())
+```
+
+
+#### ______________________________________________________________________________
+
+#### **Initial Correlation/Chi-Square Test**
 
 A correlation plot of the different variables is printed below. Some notable takeways are listed below:
 
@@ -184,7 +467,8 @@ corrplot(cor_life, tl.cex = 0.75, tl.col = "black")
 ```
 
 
-An association of life expectancy with the different factor variables (Country, Status) is printed below. The association to 'Year' is in the next section. 
+An association of life expectancy with the different factor variables (Country, Status) is printed below. The association to 
+'Year' is in the next section. 
 ``` {r factor variables, include=T}
 #summary(life)
 life_developed=na.omit(subset(life, Status=='Developed')) #subset of countries that are Developed
@@ -238,25 +522,3 @@ developing_AIDS
 
 
 ```
-
-
-Plots were constructed below to test whether life expectancy was increasing between the years 2000-2015.
-```{r Over the Years, include=T}
-loadPkg("ggplot2")
-
-theme_set(
-  theme_bw() +
-    theme(legend.position = "top")
-  )
-b <- ggplot(life, aes(x = life$Year, y = life$`Life Expectancy`))
-b + geom_point()
-b + geom_point(aes(shape = life$Status, color = life$Status)) +
-  scale_color_manual(values = c("#00AFBB", "#E7B800", "#FC4E07"))+
-  xlab('Year')+
-  ylab('Life Expectancy')+
-  ggtitle('Life Expectancy Year 2000-2015')
-
-```
-
-
-kskd
