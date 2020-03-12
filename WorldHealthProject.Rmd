@@ -125,6 +125,16 @@ qqnorm(life$Life.expectancy, main="Life Expectancy Q-Q Plot", ylab="Life Expecta
 plot(life$Life.expectancy, life$Total.expenditure, main=" Govt Expenditure on Healthcare(y) vs Life Expectancy (x) ",
    xlab="Life Expectancy ", ylab="% Healthcare Expenditure (out of total spending) ", pch=19) + 
   abline(lm(life$Total.expenditure~life$Life.expectancy), col="red") # regression line (y~x)
+
+ggplot(life, aes(x=Year, y=Life.expectancy, col=Status))+
+  geom_point() +
+  geom_smooth() + 
+  facet_wrap(~Status)
+
+ggplot(life, aes(x=factor(Year), y=Life.expectancy))+
+  geom_boxplot() + 
+  facet_wrap(~Status) + 
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
 ### Descriptive Statistics
