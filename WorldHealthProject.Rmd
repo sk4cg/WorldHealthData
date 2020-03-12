@@ -99,9 +99,48 @@ Data Source: [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who)
 
 #### ______________________________________________________________________________
 
+#### **Descriptive Statistics**
 
+First, the dataset is read in using 'read.csv.'
+```{r loadData, include=F}
+life <- read.csv('LifeExpectancyData.csv')
+```
 
-### Life expectancy EDA
+Next, the structure of the dataset is computed. The names of the different variables were reformatted accordingly. 
+```{r structure, include=T}
+names(life)[4] <- "Life Expectancy"
+names(life)[5] <- "Adult Mortality"
+names(life)[6] <- "Infant Deaths"
+names(life)[8] <- "Percentage Expenditure"
+names(life)[9] <- "Hepatitis B"
+names(life)[12] <- "Under Five Deaths"
+names(life)[14] <- "Total Expenditure"
+names(life)[16] <- "HIV/AIDS"
+names(life)[19] <- "Thinness 10-19 Years"
+names(life)[20] <- "Thinness 5-9 Years"
+names(life)[21] <- "Income Comp of Resources"
+
+str(life)
+```
+
+The summary statistics for each variable in the dataset are computed below. Please disregard the categorial (type: 'factor') 
+variables ('Country' and 'Status'), as their summary statistics are meaningless. 
+```{r plots2}
+#sapply(life, mean, na.rm=TRUE) # excluding missing values
+#sapply(life, sd)
+summary(life)
+```
+
+#### ______________________________________________________________________________
+
+#### **Graphical Representations of The Data**
+
+Then, a variety of distributions is constructed to display the frequency and distribution of life expectancy across the dataset. 
+Please note that the histogram of life expectancy is slightly left-skewed, as supported by the corresponding Q-Q Plot. 
+The scatter plot of total government expenditure versus life expectancy yields roughly four clusters centered around ages 
+45, 55, 65, and 75 with expenditure values ranging from roughly 2 to 10. The regression line constructed shows a slight positive 
+slope, although few of the values follow the trend of this line. 
+
 ```{r loadData, include ="F"}
 life <- read.csv("LifeExpectancyData.csv")
 life
@@ -125,11 +164,6 @@ qqnorm(life$Life.expectancy, main="Life Expectancy Q-Q Plot", ylab="Life Expecta
 plot(life$Life.expectancy, life$Total.expenditure, main=" Govt Expenditure on Healthcare(y) vs Life Expectancy (x) ",
    xlab="Life Expectancy ", ylab="% Healthcare Expenditure (out of total spending) ", pch=19) + 
   abline(lm(life$Total.expenditure~life$Life.expectancy), col="red") # regression line (y~x)
-
-ggplot(life, aes(x=Year, y=Life.expectancy, col=Status))+
-  geom_point() +
-  geom_smooth() + 
-  facet_wrap(~Status)
 
 ggplot(life, aes(x=factor(Year), y=Life.expectancy))+
   geom_boxplot() + 
@@ -246,5 +280,3 @@ ggplot(life, aes(x=Year, y=Life.expectancy, col=Status))+
 
 ```
 
-
-kskd
