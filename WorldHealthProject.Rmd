@@ -171,10 +171,28 @@ ggplot(life, aes(x=Schooling, y=Life.expectancy)) +
 
 ```
 
+### Significance of Correlation
 
-### Associatin of Life Expectancy with Factor Variables
+```{r correlation significance, results='asis'}
+cortest_income = cor.test(life$Income.composition.of.resources, life$Life.expectancy, method="pearson", use = "complete.obs")
+cortest_school = cor.test(life$Schooling, life$Life.expectancy, method="pearson", use = "complete.obs")
+cortest_BMI = cor.test(life$BMI, life$Life.expectancy, method="pearson", use = "complete.obs")
+cortest_AIDS = cor.test(life$HIV.AIDS, life$Life.expectancy, method="pearson", use = "complete.obs")
 
-``` {r factor variables, include=T}
+#Correlation of variables table
+cor_table = matrix(c("0.725", "<2e-16", "0.752", "<2e-16", "0.568", "<2e-16", "-0.557", "<2e-16"), ncol=2, byrow=TRUE)
+colnames(cor_table)=c("Correlation Coefficient", "P-value")
+rownames(cor_table)=c("Income", "Schooling", "BMI", "AIDS")
+
+library(knitr)
+kable(cor_table, caption="Test of Significant Correlation Results")
+
+ 
+```
+
+### Association of Life Expectancy with Factor Variables
+
+``` {r factor variables, echo=TRUE}
 #summary(life)
 life_developed=na.omit(subset(life, Status=='Developed')) #subset of countries that are Developed
 life_developing=na.omit(subset(life, Status=='Developing')) #subset of countries that are Developing
@@ -188,11 +206,6 @@ t_life_developed$conf.int
 t_life_developing$conf.int
 mean_life_developed
 mean_life_developing
-
-#Use Chi-squared test to determine if Life Expectancy is independent of Developed/Developing
-contable = table(life$Life.expectancy, life$Status)
-chitest = chisq.test(contable)
-chitest  #Not independent as p<<0.05
 
 #make overlaying histograms of the two subgroups aes(x = rank, y = gpa, fill = admit)
 # First distribution
@@ -217,28 +230,29 @@ legend("topright", legend=c("Developing","Developed"), col=c(rgb(1,0,0,0.5),
      rgb(0,0,1,0.5)), pt.cex=2, pch=15 )
 
 
-
-#Variables most highly correlated to life expectacy were Income.composition.of.resources and Schooling. Though BMI and Aids had highish correlations. Adult mortality was highly correlated with life expectancy, but the reasons are obvious, so they will not be evaluated here. 
-#These all compare the differences in means between the developing and developed countries
-developed_income= mean(life_developed$Income.composition.of.resources)
-developing_income=mean(life_developing$Income.composition.of.resources)
-developed_school=mean(life_developed$Schooling)
-developing_school=mean(life_developing$Schooling)
-developed_BMI=mean(life_developed$BMI)
-developing_BMI=mean(life_developing$BMI)
-developed_AIDS=mean(life_developed$HIV.AIDS)
-developing_AIDS=mean(life_developing$HIV.AIDS)
-
-developed_income
-developing_income
-developed_school
-developing_school
-developed_BMI
-developing_BMI
-developed_AIDS
-developing_AIDS
+#t-test of developed vs developing of variables found to have significantly high correlations with Life Expectancy
+ttest_income = t.test(life_developed$Income.composition.of.resources, life_developing$Income.composition.of.resources)
+ttest_school = t.test(life_developed$Schooling, life_developing$Schooling)
+ttest_BMI = t.test(life_developed$BMI, life_developing$BMI)
+ttest_AIDS = t.test(life_developed$HIV.AIDS, life_developing$HIV.AIDS)
 
 
+ttest_income
+ttest_school
+ttest_BMI
+ttest_AIDS
+
+
+```
+
+```{r t-test table, results='asis'}
+#Correlation of variables table
+ttest_table = matrix(c("0.836", "0.596", "<2e-16", "0.15.6", "11.5", "<2e-16", "52.3", "35.7", "<2e-16", "0.10", "2.31", "<2e-16"), ncol=3, byrow=TRUE)
+colnames(ttest_table)=c("Mean Value Developed", "Mean Value Developing", "P-value")
+rownames(ttest_table)=c("Income level, from 0 to 1", "Years of Schooling", "BMI", "AIDS, per 1000 people")
+
+library(knitr)
+kable(ttest_table, caption="T-test Between Developed and Developing Countries for Variables Highly Correlated to Life Expectancy")
 
 ```
 
