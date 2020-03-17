@@ -142,21 +142,15 @@ summary(life)
 
 #### **Initial Correlation/Chi-Square Test**
 
-A correlation plot of the different variables is printed below. Some notable takeways are listed below:
+  To determine the relationship between numerical variables and 'Life Expectancy', a correlation was performed. The variables "Country" and "Status" were removed prior to perforing the corration, as they are factor variables and will be addressed later. Additionally, rows that were blank or had "NA" in them were ignored, as array sized must be equivalent to perform a correlation between variables. 
 
-  • 'Adult Mortality' has the strongest overall correlation with 'Life Expectancy' (roughly -0.70).
-  
-  • 'Income Composition of Resources' and 'Schooling' have strong positive correlations with 'Life Expectancy' (roughly 0.75).
-  
-  • 'HIV/AIDS' has a relatively strong negative correlation with 'Life Expectancy' (roughly 0.55).
-  
-  • 'Measles' and 'Population' have almost no correlation with 'Life Expectancy' (roughly 0). 
+  The resulting correlation matrix can be viewed below. It was found that the top 5 variables correlated with 'Life Expectancy' were 'Adult Mortality', 'Income Composition of Resources', 'Schooling', 'HIV/AIDS', and 'BMI'. The correlation coefficients for these variables were -0.70, 0.73, 0.75, -0.56, and 0.57, respectively. The negative value in front of the correlations for 'Adult Mortality' and 'HIV/AIDS' indicates that as the life expectancy increases, the adult mortality and incidence of AIDS decreases. It is important to note that the variable 'Population' had virtually no correlation with 'Life Expectancy', as it had a correlation coefficient of -0.02. 
 
 ```{r correlation, include=T}
 library(dplyr)
 sapply(life, class) #look at the class of each variables
 life_nofactor = select(life, -c(Country, Status)) #remove the factor variables
-cor_life=cor(na.omit(life_nofactor)) #create correlation matrix
+cor_life=cor(life_nofactor,use = "complete.obs") #create correlation matrix
 library(corrplot)
 corrplot(cor_life, type="lower") #plot correlation matrix
 ggplot(life, aes(x=GDP, y=percentage.expenditure)) + 
@@ -171,18 +165,52 @@ ggplot(life, aes(x=Schooling, y=Life.expectancy)) +
 
 ```
 
-### Significance of Correlation
+  The relationship between 'Adult Mortality' and 'Life Expectancy' was ignored for the duration of this EDA due to the obviousness lack of information that would be gathered from further exloring this. It is redundent information that as the adult mortality rate increased, the life expectancy would decrease. The other variables, however, are explored in further detail. 
 
-```{r correlation significance, results='asis'}
-cortest_income = cor.test(life$Income.composition.of.resources, life$Life.expectancy, method="pearson", use = "complete.obs")
-cortest_school = cor.test(life$Schooling, life$Life.expectancy, method="pearson", use = "complete.obs")
-cortest_BMI = cor.test(life$BMI, life$Life.expectancy, method="pearson", use = "complete.obs")
-cortest_AIDS = cor.test(life$HIV.AIDS, life$Life.expectancy, method="pearson", use = "complete.obs")
 
-#Correlation of variables table
-cor_table = matrix(c("0.725", "<2e-16", "0.752", "<2e-16", "0.568", "<2e-16", "-0.557", "<2e-16"), ncol=2, byrow=TRUE)
+### Significance of Correlated Variables
+
+  The level of significance for all numerical variables was found using the cor.test function. All numerical variables were found to be significantly correlated to life expectancy except population, which had a correlation coefficient of -0.02 and a p-value of 0.30. ALl other numerical variables had p-values of less than 2x10e-16. A table of the correlation coefficients and p-values is shown in the table below. 
+
+```{r correlation significance, results=TRUE}
+#Correlation test of significance for correlation coefficients above plus/minus 0.5
+cortest_income = cor.test(life$Income.composition.of.resources, life$Life.expectancy, method="pearson")
+cortest_school = cor.test(life$Schooling, life$Life.expectancy, method="pearson")
+cortest_BMI = cor.test(life$BMI, life$Life.expectancy, method="pearson")
+cortest_AIDS = cor.test(life$HIV.AIDS, life$Life.expectancy, method="pearson")
+#Those with correlations between plus/minus 0.4 and 0.5
+cortest_GDP = cor.test(life$GDP, life$Life.expectancy, method="pearson")
+cortest_Alcohol = cor.test(life$Alcohol, life$Life.expectancy, method="pearson")
+cortest_expend = cor.test(life$percentage.expenditure, life$Life.expectancy, method="pearson")
+cortest_thin19 = cor.test(life$thinness..1.19.years, life$Life.expectancy, method="pearson")
+cortest_thin5 = cor.test(life$thinness.5.9.years, life$Life.expectancy, method="pearson")
+#Those with correlations between plus/minus 0.3 and 0.4
+cortest_polio = cor.test(life$Polio, life$Life.expectancy, method="pearson")
+cortest_dip = cor.test(life$Diphtheria, life$Life.expectancy, method="pearson")
+#Those with correlations below 0.3
+cortest_infantdeath = cor.test(life$infant.deaths, life$Life.expectancy, method="pearson")
+cortest_hep = cor.test(life$Hepatitis.B, life$Life.expectancy, method="pearson")
+cortest_measles = cor.test(life$Measles, life$Life.expectancy, method="pearson")
+cortest_under5 = cor.test(life$under.five.deaths, life$Life.expectancy, method="pearson")
+cortest_totalexpend = cor.test(life$Total.expenditure, life$Life.expectancy, method="pearson")
+cortest_pop = cor.test(life$Population, life$Life.expectancy, method="pearson")
+cortest_year = cor.test(life$Year, life$Life.expectancy, method="pearson")
+
+#Table to check and use to make nice looking table, since kable won't use scientific notation
+cor_table_raw = matrix(c(cortest_income$estimate, cortest_income$p.value, cortest_school$estimate, cortest_school$p.value, cortest_BMI$estimate, cortest_BMI$p.value, cortest_AIDS$estimate, cortest_AIDS$p.value, cortest_GDP$estimate, cortest_GDP$p.value, cortest_Alcohol$estimate, cortest_Alcohol$p.value, cortest_expend$estimate, cortest_expend$p.value, cortest_thin19$estimate, cortest_thin19$p.value, cortest_thin5$estimate, cortest_thin5$p.value, cortest_polio$estimate, cortest_polio$p.value, cortest_dip$estimate, cortest_dip$p.value, cortest_infantdeath$estimate, cortest_infantdeath$p.value, cortest_hep$estimate, cortest_hep$p.value, cortest_measles$estimate, cortest_measles$p.value, cortest_under5$estimate, cortest_under5$p.value, cortest_totalexpend$estimate, cortest_totalexpend$p.value, cortest_pop$estimate, cortest_pop$p.value, cortest_year$estimate, cortest_year$p.value), ncol=2, byrow=TRUE)
+colnames(cor_table_raw)=c("Correlation Coefficient", "P-value")
+rownames(cor_table_raw)=c("Income", "Schooling", "BMI", "AIDS", "GDP", "Alcohol", "Gov Expend", "Thinnest to 19", "Thinness to Age 5", "Polio", "Diptheria", "Infant Death", "HepB", "Measles", "Death Under 5", "Total Expenditure", "Population", "Year")
+
+cor_table_raw
+```
+
+
+
+```{r correlation significance table, results='asis'}
+#Correlation of variables table- This section is just to use a nicer table for the RMarkdown version. It doesn't let you do scientific notation as in the above, so I manually placed these in. 
+cor_table = matrix(c("0.73", "<2e-16", "0.75", "<2e-16", "0.57", "<2e-16", "-0.56", "<2e-16", "0.46", "<2e-16", "0.40", "<2e-16", "0.38", "<2e-16", "-0.48", "<2e-16", "-0.47", "<2e-16", "0.47", "<2e-16", "0.48", "<2e-16", "-0.20", "<2e-16", "0.26", "<2e-16", "-0.16", "<2e-16", "-0.22", "<2e-16", "0.22", "<2e-16", "-0.02", "0.30", "0.17", "<2e-16"), ncol=2, byrow=TRUE)
 colnames(cor_table)=c("Correlation Coefficient", "P-value")
-rownames(cor_table)=c("Income", "Schooling", "BMI", "AIDS")
+rownames(cor_table)=c("Income", "Schooling", "BMI", "AIDS", "GDP", "Alcohol", "Gov Expend", "Thinness to Age 19", "Thinness to Age 5", "Polio", "Diptheria", "Infant Death", "HepB", "Measles", "Death Under 5", "Total Expenditure", "Population", "Year")
 
 library(knitr)
 kable(cor_table, caption="Test of Significant Correlation Results")
@@ -191,6 +219,9 @@ kable(cor_table, caption="Test of Significant Correlation Results")
 ```
 
 ### Association of Life Expectancy with Factor Variables
+
+  The factor variables that were removed earlier were 'Country' and 'Status'. The 'Status' was that of coutries that were 'Developed' and 'Developing'. To determine whether the a country's life expectancy was different for 'Developed' versus 'Developing' countries, a t-test was performed. It was found that the average life expectancy in the developed countries was 78.7 years of age and that in the developing countries was 67.7 years. The t-test results found the mean life expectancy to be significantly different, with a p-value of less than 2e-16.
+  To visually discern the difference in life expectancies, histograms (one showing actual counts and the other showing proportions) were generated. As can be seen, the life expectancy of those in developed countries are all grouped toward the higher (right-hand) side of the histogram, while those in developong countries are, on average, much lower. 
 
 ``` {r factor variables, echo=TRUE}
 #summary(life)
@@ -206,11 +237,12 @@ t_life_developed$conf.int
 t_life_developing$conf.int
 mean_life_developed
 mean_life_developing
+ttest_status = t.test(life_developed$Life.expectancy, life_developing$Life.expectancy)
 
 #make overlaying histograms of the two subgroups aes(x = rank, y = gpa, fill = admit)
 # First distribution
 hist(life_developing$Life.expectancy, col=rgb(1,0,0,0.5), xlab="Life Expectancy", 
-     ylab="Count", main="Life Expectancy of Developed vs Developing Countries-Absolute Count" )
+     ylab="Count", main="Life Expectancy of Developed vs Developing Countries-Actual Count" )
 # Second with add=T to plot on top
 hist(life_developed$Life.expectancy, col=rgb(0,0,1,0.5), add=T)
 # Add legend
@@ -244,6 +276,11 @@ ttest_AIDS
 
 
 ```
+
+### Difference in Variable Between Developed and Developing Countries
+
+
+  
 
 ```{r t-test table, results='asis'}
 #Correlation of variables table
