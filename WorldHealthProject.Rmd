@@ -124,13 +124,14 @@ qqline(life$Life.expectancy)
 #ggplot(life2, aes(x=Total.expenditure, y=Life.expectancy, fill=Total.expenditure, group = 1)) + geom_boxplot() + scale_fill_brewer(palette="Spectral") + ggtitle("Life Expectancy vs. Total Expenditure") + ylab("Life Expectancy") + xlab("Total Expenditure ($)") 
 
 plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs. Govt Expenditure on Healthcare(x) ",
-   xlab="% Healthcare Expenditure (out of total spending)", ylab="Life Expectancy ", pch=19) + 
+   xlab="% Healthcare Expenditure (out of total Govt spending)", ylab="Life Expectancy (Age)", pch=19) + 
   abline(lm(life$Life.expectancy~life$Total.expenditure), col="red") # regression line (y~x)
 
 ggplot(life, aes(x=factor(Year), y=Life.expectancy))+
   geom_boxplot() + 
   facet_wrap(~Status) + 
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.x = element_text(angle = 90)) +
+  ylab("Life Expectancy (Age)")
 ```
 
 ### Descriptive Statistics
@@ -156,13 +157,22 @@ library(corrplot)
 corrplot(cor_life, type="lower") #plot correlation matrix
 ggplot(life, aes(x=GDP, y=percentage.expenditure)) + 
   geom_point() + 
-  geom_smooth()
+  geom_smooth() +
+  ylab("Expenditure on health as a % of GDP per capita(%)") +
+  xlab("Gross Domestic Product (GDP per capita in USD)") +
+  ggtitle("Health Expediture (y) vs GDP (x)")
 ggplot(life, aes(x=HIV.AIDS, y=Life.expectancy)) + 
   geom_point() + 
-  geom_smooth()
+  geom_smooth() +
+  ylab("Life Expectancy (Age)") +
+  xlab("Deaths due to HIV/AIDS per 1000 live births (for 0-4 years)")+
+  ggtitle("Life Expectancy (y) vs Deaths due to HIV/AIDS (x)")
 ggplot(life, aes(x=Schooling, y=Life.expectancy)) + 
   geom_point() + 
-  geom_smooth()
+  geom_smooth() +
+  ylab("Life Expectancy (Age)") +
+  xlab("Years of Schooling")+
+  ggtitle("Life Expectancy (y) vs Years of Schooling (x)")
 
 ```
 
