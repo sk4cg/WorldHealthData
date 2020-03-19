@@ -118,13 +118,14 @@ ggplot(life, aes(x=Life.expectancy) )+
   xlab("Life Expectancy (Age)")
 
 qqnorm(life$Life.expectancy, main="Life Expectancy Q-Q Plot", ylab="Life Expectancy (Age)")
+qqline(life$Life.expectancy)
 
 
 #ggplot(life2, aes(x=Total.expenditure, y=Life.expectancy, fill=Total.expenditure, group = 1)) + geom_boxplot() + scale_fill_brewer(palette="Spectral") + ggtitle("Life Expectancy vs. Total Expenditure") + ylab("Life Expectancy") + xlab("Total Expenditure ($)") 
 
-plot(life$Life.expectancy, life$Total.expenditure, main=" Govt Expenditure on Healthcare(y) vs Life Expectancy (x) ",
-   xlab="Life Expectancy ", ylab="% Healthcare Expenditure (out of total spending) ", pch=19) + 
-  abline(lm(life$Total.expenditure~life$Life.expectancy), col="red") # regression line (y~x)
+plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs. Govt Expenditure on Healthcare(x) ",
+   xlab="% Healthcare Expenditure (out of total spending)", ylab="Life Expectancy ", pch=19) + 
+  abline(lm(life$Life.expectancy~life$Total.expenditure), col="red") # regression line (y~x)
 
 ggplot(life, aes(x=factor(Year), y=Life.expectancy))+
   geom_boxplot() + 
