@@ -1,6 +1,6 @@
 ---
-title: "Project One: Wasted Potential"
-author: "Sneha, RyeAnne, Ben, Yuqi"
+title: "Project One"
+author: "Wasted Potential: Sneha, RyeAnne, Ben, Yuqi"
 date: "11 March 2020"
 output:
   html_document:
@@ -17,7 +17,6 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, results = F, message = F)
 options(scientific=T, digits = 3) 
-options(scipen=999) # use scipen=999 to prevent scientific notation at all times
 ```
 
 ```{r basicfcn, include=F}
@@ -34,7 +33,9 @@ detach_package = function(pkg, character.only = FALSE) { if(!character.only) { p
 
 #### ______________________________________________________________________________
 
-#### **Summary of The Dataset**
+
+
+# Summary of The Dataset
 
 The dataset of choice for Project One was originally constructed by the World Health Organization (WHO) to track the health status of 193 countries across the world. The question we
 sought to answer is as follows: 
@@ -94,7 +95,7 @@ Data Source: [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who)
 
 
 
-### Life expectancy EDA
+# Life expectancy EDA
 ```{r loadData, include ="F"}
 life <- read.csv("LifeExpectancyData.csv")
 life
@@ -307,7 +308,7 @@ ggplot(life, aes(x=Year, y=Life.expectancy, col=Status))+
 
 ```
 
-# Subsetting and Pre-processing
+## Subsetting and Pre-processing
 
 ```{r subsetting, include=T}
 data <- read.csv("lifeexpectancydata.csv")
@@ -353,7 +354,7 @@ data_world_map$Country[data_world_map$Country == 'Viet Nam'] <- 'Vietnam'
 two_thousand <- subset(x=data_world_map, data_world_map$Year==2000)
 ```
 
-# Combining and plotting LE data from the year 2000
+## Combining and plotting LE data from the year 2000
 
 ```{r combining_2000, include=T}
 loadPkg("ggmap")
@@ -385,7 +386,7 @@ ggplot(data=combined_2000, aes(x=long, y=lat, group=group, fill=value)) +
   theme(panel.border=element_blank())
 ```
 
-# Combining and plotting LE data from the year 2005
+## Combining and plotting LE data from the year 2005
 
 ```{r combining_2005, include=T}
 loadPkg("ggmap")
@@ -417,7 +418,7 @@ ggplot(data=combined_2005, aes(x=long, y=lat, group=group, fill=value)) +
   theme(panel.border=element_blank())
 ```
 
-# Combining and plotting LE data from the year 2010
+## Combining and plotting LE data from the year 2010
 
 ```{r combining_2010, include=T}
 loadPkg("ggmap")
@@ -448,7 +449,7 @@ ggplot(data=combined_2010, aes(x=long, y=lat, group=group, fill=value)) +
   scale_x_continuous(breaks=c()) +
   theme(panel.border=element_blank())
 ```
-# Combining and plotting LE data from the year 2015
+## Combining and plotting LE data from the year 2015
 
 ```{r combining_2015, include=T}
 loadPkg("ggmap")
@@ -480,7 +481,7 @@ ggplot(data=combined_2015, aes(x=long, y=lat, group=group, fill=value)) +
   theme(panel.border=element_blank())
 ```
 
-# Subsetting and Pre-processing for Mean Life Expectancy
+## Subsetting and Pre-processing for Mean Life Expectancy
 
 ```{r aggregates, include=T}
 loadPkg("dplyr")
@@ -530,7 +531,7 @@ le_clean = anti_join(data_le_means, le_na)
 country_and_status <- le_clean %>% group_by(Country, Status) %>% summarise(mean_le = mean(Life.expectancy))
 ```
 
-# Combining and Plotting Mean LE across all years
+## Combining and Plotting Mean LE across all years
 
 ```{r combining_means, include=T}
 loadPkg("ggmap")
@@ -561,3 +562,5 @@ ggplot(data=combined_means, aes(x=long, y=lat, group=group, fill=value)) +
   scale_x_continuous(breaks=c()) +
   theme(panel.border=element_blank())
 ```
+
+# Conclusion
