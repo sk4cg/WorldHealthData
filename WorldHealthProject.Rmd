@@ -40,14 +40,14 @@ detach_package = function(pkg, character.only = FALSE) { if(!character.only) { p
 
 # Introduction 
 
-Life expectancy is a summary of the overall mortality level of a given population. The reported life expectancy reflects that mortality pattern that exists across all age groups in the current year. In 2016, the global life expectancy was 72 years old, with female values reporting roughly 4 years longer than males. What was particularly interesting was the wide range of values by location that encompassed that overall 72 years old value. In that year the reported values ranged from 61.2 years old in the WHO African region to 77.5 years old in the WHO European Region (taken from statistics on who.int site), a gap that is about 16 years in size. These values highlight the huge inequality in how health is distributed around the world. It pushed us to question what differing factors could have affected the trends in mortality so drastically across the globe? We found a public dataset from Kaggle ("Life Expectancy (WHO): Statistical Analysis on factors influencing Life Expectancy") that provided 2,938 observations across 22 variables. The variables ranges from health factors such as BMI and immunizations to population factors such as developing status and GDP (Gross Domestic Product per capita). We utilized a combination of decriptive graphs and tests to explore our data and given variables. Our Exploratory Data Analysis will be useful in identifying key factors that can aid in building models to predict future life expectancy values.  
+Life expectancy is a summary of the overall mortality level of a given population. The reported life expectancy reflects that mortality pattern that exists across all age groups in the current year. In 2016, the global life expectancy was 72 years old, with female values reporting roughly 4 years longer than males. What was particularly interesting was the wide range of values by location that encompassed that overall 72 years old value. In that year the reported values ranged from 61.2 years old in the WHO African region to 77.5 years old in the WHO European Region (taken from statistics on who.int site), a gap that is about 16 years in size. These values highlight the huge inequality in how health is distributed around the world. It pushed us to question what differing factors could have affected the trends in mortality so drastically across the globe? We found a public dataset from Kaggle ("Life Expectancy (WHO): Statistical Analysis on factors influencing Life Expectancy") that provided 2,938 observations across 22 variables. The variables ranges from health factors such as BMI and immunizations to population factors such as developing status and GDP (Gross Domestic Product per capita). The data was collected from the World Health Organization (WHO) website and the United Nations website and then posted on Kaggle where we discovered it. We utilized a combination of decriptive graphs and tests to explore our data and given variables. Our Exploratory Data Analysis will be useful in identifying key factors that can aid in building models to predict future life expectancy values.  
 
 # Summary of The Dataset
 
 The dataset of choice for Project One was originally constructed by the World Health Organization (WHO) to track the health status of 193 countries across the world. The question we
 sought to answer is as follows: 
 
-**What factors affect life expectancy in individuals across the world?**
+**SMART Question: What factors affect life expectancy in individuals across the world?**
 
 The dataset includes a variety of factors that contribute to the overall health status of a country. We wanted to know what effect these factors had specifically 
 on life expectancy. An explanation of the different factors in this dataset are as follows: 
@@ -100,7 +100,19 @@ Data Source: [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who)
 
  The relationship between 'Adult Mortality' and 'Life Expectancy' was ignored for the duration of this EDA due to the obviousness lack of information that would be gathered from further exloring this. It is redundent information that as the adult mortality rate increased, the life expectancy would decrease. The other variables, however, are explored in further detail. 
 
+
 #### ______________________________________________________________________________
+
+
+# Problems with the Data 
+
+note --> should this be a subheading? idk where to put it 
+
+As we were beginning our analysis of the dataset, we noticed some unusual values in some graphs and statistics. For instance, the "percentage expenditure" variable is a reflection of the money spent on health as a percentage of GDP per capita, as such, the highest possible number a percent value can be in this context is 100%. However, we noticed that one of the data points showed 19480 as the percentage expediture for Switzerland which did not make sense. In addition, there was also a datapoint thatt showed China's percentage expediture as zero, which we also know is not true. In other instances such as for population values, we notices values in the thousands, when they should have been in the millions range. 
+
+---> going to talk about more problems, etc. 
+
+We believe that some of the discrepancies in the dataset were perhaps due to oweners hand entering values or improperly joining the data from the two different sources (from the WHO and the UN). 
 
 
 # Life Expectancy EDA
@@ -109,6 +121,7 @@ Data Source: [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who)
 life <- read.csv("LifeExpectancyData.csv")
 life
 ```
+
 
 ## Life expectancy distributions 
 
@@ -173,7 +186,7 @@ plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs
 #  ylab("Life Expectancy (Age)")
 ```
 
-The scatterplot below "Per Capita Health Expediture (y) vs GDP (x)" shows a positive relationship between life expectancy and the amoutn of money spent on healthcare as a % of GDP per capita. This is more in line with our hypothesis that the more money spent on healthcare should result in better health outcomes and higher life expectancy ages. It seems that the difference between the graph below and the graph above is indicating that different amounts of government spending does not have a great effect but the overall amount that citizens are willing to spend will be more indicative of greater life expectancy. One hypothesis is that no matter how much the government is willing to spend or not spend on their citizens, each person will do their best to supplement the amount given to them with the sufficient fundign to meet ttheir healthcare needs, this could be studied further with more quantitative spending data instead of just percentages.  
+The scatterplot below, "Per Capita Health Expediture (y) vs GDP (x)", shows a positive relationship between life expectancy and the amoutn of money spent on healthcare as a % of GDP per capita. This is more in line with our hypothesis that the more money spent on healthcare should result in better health outcomes and higher life expectancy ages. It seems that the difference between the graph below and the graph above is indicating that different amounts of government spending does not have a great effect but the overall amount that citizens are willing to spend will be more indicative of greater life expectancy. One hypothesis is that no matter how much the government is willing to spend or not spend on their citizens, each person will do their best to supplement the amount given to them with the sufficient fundign to meet ttheir healthcare needs, this could be studied further with more quantitative spending data instead of just percentages.  
 
 ```{r plots4, include=T}
 ggplot(life, aes(x=GDP, y=percentage.expenditure)) + 
@@ -185,6 +198,8 @@ ggplot(life, aes(x=GDP, y=percentage.expenditure)) +
 
 ```
 
+The scatterplot below, "Life Expectancy (y) vs Deaths due to HIV/AIDS (x)", shows a
+
 ```{r plots5, include=T}
 ggplot(life, aes(x=HIV.AIDS, y=Life.expectancy)) + 
   geom_point() + 
@@ -195,6 +210,9 @@ ggplot(life, aes(x=HIV.AIDS, y=Life.expectancy)) +
 
 
 ```
+
+
+The scatterplot below, "Life Expectancy (y) vs Years of Schooling (x)", shows a
 
 ```{r plots6, include=T}
 ggplot(life, aes(x=Schooling, y=Life.expectancy)) + 
@@ -335,7 +353,8 @@ kable(ttest_table, caption="T-test Between Developed and Developing Countries fo
 ggplot(life, aes(x=Year, y=Life.expectancy, col=Status))+
   geom_point() +
   geom_smooth() + 
-  facet_wrap(~Status)
+  facet_wrap(~Status)+
+  ggtitle("Life Expectancy (y) vs Year (x) in Developed and Developing Nations")
 
 ```
 
