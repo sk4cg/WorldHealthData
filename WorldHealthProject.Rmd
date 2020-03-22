@@ -12,13 +12,18 @@ output:
   pdf_document:
     toc: yes
     toc_depth: '2'
+    font_size: '3'
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = F, results = F, message = F)
 options(scientific=T, digits = 3) 
 ```
-
+<style type="text/css">
+body{
+      font-size: 15px;
+  }
+</style>
 ```{r basicfcn, include=F}
 # use this function to conveniently load libraries and work smoothly with knitting
 # can add quietly=T option to the require() function
@@ -104,7 +109,9 @@ life
 ```
 
 ### Life expectancy distributions 
-```{r plots}
+
+The histogram below presents the distribution of Life Expectancy values in this dataset. It shows that the youngest values start at 36.3 and go all the way up to 89 years old as the oldest expected ages. The mean life expectancy is 69.2 years old and the median life expectancy is 72.1 years old. These values are also indicated in the left skewed histogram below. Typically, in a left skewed distribution, most of the data points are on the right side of the histogram and there are some smaller values towards the left. This is reflected in the histogram for our data as well. The smaller values in the left skew lower the value of the mean which results in a mean smaller than the median (versus a symmetric, normal distribution in which the mean and median values would be even closer together). 
+```{r plots1}
 life2 <- na.omit(life) #omit missing values 
 
 loadPkg("ggplot2")
@@ -112,10 +119,11 @@ ggplot(life, aes(x=Life.expectancy) )+
   geom_histogram(color="darkblue",fill="lightblue")+
   ggtitle("Life Expectancy Histogram")+
   xlab("Life Expectancy (Age)")
+```
 
+```{r plots2}
 qqnorm(life$Life.expectancy, main="Life Expectancy Q-Q Plot", ylab="Life Expectancy (Age)")
 qqline(life$Life.expectancy)
-
 
 #ggplot(life2, aes(x=Total.expenditure, y=Life.expectancy, fill=Total.expenditure, group = 1)) + geom_boxplot() + scale_fill_brewer(palette="Spectral") + ggtitle("Life Expectancy vs. Total Expenditure") + ylab("Life Expectancy") + xlab("Total Expenditure ($)") 
 
@@ -123,12 +131,27 @@ plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs
    xlab="% Healthcare Expenditure (out of total Govt spending)", ylab="Life Expectancy (Age)", pch=19) + 
   abline(lm(life$Life.expectancy~life$Total.expenditure), col="red") # regression line (y~x)
 
-ggplot(life, aes(x=factor(Year), y=Life.expectancy))+
-  geom_boxplot() + 
-  facet_wrap(~Status) + 
-  theme(axis.text.x = element_text(angle = 90)) +
-  ylab("Life Expectancy (Age)")
+#ggplot(life, aes(x=factor(Year), y=Life.expectancy))+
+#  geom_boxplot() + 
+#  facet_wrap(~Status) + 
+#  theme(axis.text.x = element_text(angle = 90)) +
+#  ylab("Life Expectancy (Age)")
 ```
+
+
+
+```{r plots3}
+plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs. Govt Expenditure on Healthcare(x) ",
+   xlab="% Healthcare Expenditure (out of total Govt spending)", ylab="Life Expectancy (Age)", pch=19) + 
+  abline(lm(life$Life.expectancy~life$Total.expenditure), col="red") # regression line (y~x)
+
+#ggplot(life, aes(x=factor(Year), y=Life.expectancy))+
+#  geom_boxplot() + 
+#  facet_wrap(~Status) + 
+#  theme(axis.text.x = element_text(angle = 90)) +
+#  ylab("Life Expectancy (Age)")
+```
+
 
 ### Descriptive Statistics
 ```{r stats}
