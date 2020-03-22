@@ -33,7 +33,9 @@ detach_package = function(pkg, character.only = FALSE) { if(!character.only) { p
 
 #### ______________________________________________________________________________
 
+# Introduction 
 
+Life expectancy is a summary of the overall mortality level of a given population. The reported life expectancy reflects that mortality pattern that exists across all age groups in the current year. In 2016, the global life expectancy was 72 years old, with female values reporting roughly 4 years longer than males. What was particularly interesting was the wide range of values by location that encompassed that overall 72 years old value. In that year the reported values ranged from 61.2 years old in the WHO African region to 77.5 years old in the WHO European Region (taken from statistics on who.int site), a gap that is about 16 years in size. These values highlight the huge inequality in how health is distributed around the world. It pushed us to question what differing factors could have affected the trends in mortality so drastically across the globe? We found a public dataset from Kaggle ("Life Expectancy (WHO): Statistical Analysis on factors influencing Life Expectancy") that provided 2,938 observations across 22 variables. The variables ranges from health factors such as BMI and immunizations to population factors such as developing status and GDP (Gross Domestic Product per capita). We utilized a combination of decriptive graphs and tests to explore our data and given variables. Our Exploratory Data Analysis will be useful in identifying key factors that can aid in building models to predict future life expectancy values.  
 
 # Summary of The Dataset
 
@@ -564,3 +566,11 @@ ggplot(data=combined_means, aes(x=long, y=lat, group=group, fill=value)) +
 ```
 
 # Conclusion
+
+# References
+
+K. Rajarshi. Life Expectancy (WHO). Kaggle, 2018. 
+https://www.kaggle.com/kumarajarshi/life-expectancy-who
+
+Global  Health Observatory (GHO) data: Life Expectancy. WHO. 
+https://www.who.int/gho/mortality_burden_disease/life_tables/situation_trends_text/en/
