@@ -158,10 +158,12 @@ corrplot(cor_life, type="lower") #plot correlation matrix
 
 ```
 
+### Comparison of Life Expectancy and Expenditure 
+
+Two interesting variables we wanted to take a closer look at in our initial exploration of this dataset involved the relationship between spendign money and life expectancy. There were two variables: percentage expenditure and total expenditure, and it is important to highlight their differences in order to clarify the perspectives they may provide. Percentage expenditure refers to the expenditure on health as a percentage of GDP (Gross Domestic Product) per capita for the given year whereas total expenditure refers to the government's expediture on healthcare as a percentage of the total government spending for that given year. We initially thought that if we looked at total expenditure, we would see a clear trend as it could make sense that the more the government spends on healthcare should translate to overall better health outhcomes and thus higher life expectancy. But as we can see from the scatterplot graph "Life Expectancy (y) vs. Govt Healthcare Expenditure(x)" below we see no discernable positive or negative relationship between the data points. 
 
 ```{r plots3}
-plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs. Govt Healthcare Expenditure(x) ",
-   xlab="% Healthcare Expenditure (out of total Govt spending)", ylab="Life Expectancy (Age)", pch=19) + 
+plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs. Govt Healthcare Expenditure(x) ", xlab="% Healthcare Expenditure (out of total Govt spending)", ylab="Life Expectancy (Age)", pch=19) +
   abline(lm(life$Life.expectancy~life$Total.expenditure), col="red") # regression line (y~x)
 
 #ggplot(life, aes(x=factor(Year), y=Life.expectancy))+
@@ -171,7 +173,7 @@ plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs
 #  ylab("Life Expectancy (Age)")
 ```
 
-
+The scatterplot below "Per Capita Health Expediture (y) vs GDP (x)" shows a positive relationship between life expectancy and the amoutn of money spent on healthcare as a % of GDP per capita. This is more in line with our hypothesis that the more money spent on healthcare should result in better health outcomes and higher life expectancy ages. It seems that the difference between the graph below and the graph above is indicating that different amounts of government spending does not have a great effect but the overall amount that citizens are willing to spend will be more indicative of greater life expectancy. One hypothesis is that no matter how much the government is willing to spend or not spend on their citizens, each person will do their best to supplement the amount given to them with the sufficient fundign to meet ttheir healthcare needs, this could be studied further with more quantitative spending data instead of just percentages.  
 
 ```{r plots4, include=T}
 ggplot(life, aes(x=GDP, y=percentage.expenditure)) + 
@@ -179,7 +181,7 @@ ggplot(life, aes(x=GDP, y=percentage.expenditure)) +
   geom_smooth() +
   ylab("Expenditure on health as a % of GDP per capita(%)") +
   xlab("Gross Domestic Product (GDP per capita in USD)") +
-  ggtitle("Health Expediture (y) vs GDP (x)")
+  ggtitle("Per Capita Health Expediture (y) vs GDP (x)")
 
 ```
 
