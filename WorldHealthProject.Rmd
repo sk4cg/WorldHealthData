@@ -114,6 +114,7 @@ Data Source: [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who)
 
 As we were beginning our analysis of the dataset, we noticed some unusual values in some graphs and statistics. For instance, the "percentage expenditure" variable is a reflection of the money spent on health as a percentage of GDP per capita, as such, the highest possible number a percent value can be in this context is 100%. However, we noticed that one of the data points showed 19480 as the percentage expenditure for Switzerland which did not make sense. In addition, there was also a datapoint that showed China's percentage expenditure as zero, which we also know is not true. In other instances such as for population values, we noticed values in the thousands, when they should have been in the millions range. We believe that some of the discrepancies in the dataset were perhaps due to owners hand entering values or improperly joining the data from the two different sources (from the WHO and the UN). We ultimately decided that we should not attempt to remove these values as we would have to manually identify discrepancies, and since we are not creating linear models to make predictions it is not necessary at this point. For future analysis we would recommend cleaning the dataset of these incorrect values before proceeding with creating models. 
 
+#### ______________________________________________________________________________
 
 # Life Expectancy EDA
 
@@ -417,6 +418,8 @@ kable(ttest_table, caption="T-test Between Developed and Developing Countries fo
 There are many takeaways from table above. First, are the factors that attribute to the health of the individuals in the developed versus developing countries. The immunization levels of the developed countries is higher, by over 10%, than the developing countries for each of the major diseases listed; Polio, Diphtheria, and Hepatitis B. For diseases in which there is no vaccine, the incidence rates per 1000 people is much higher, as can be seen for Measles and AIDS. Additionally, the prevalence of thinness in the developing countries is much higher, with the average BMI being lower. These factors likely attribute to the higher death rates for children and infants depicted above. 
 In the developed countries, the level of education is over 4 years longer than the developed, which may lead to the higher level of income seen in the developed countries. It can also be seen that the government expenditure, whether you are referring to total expenditure or percentage, is much higher in the developed countries. This could lead one to believe that life expectancy could potentially be extended with higher levels of government aid. 
 
+#### ______________________________________________________________________________
+
 ## Is Life Expectancy Increasing?
 
 ```{r Over the Years, include=T}
@@ -431,6 +434,9 @@ ggplot(life, aes(x=Year, y=Life.expectancy, col=Status))+
 This above graph shows the average life expectancy with respective of developed and developing countries over the years. We can clearly see the average life expectancy for both developed and developing countries increases from 2000 to 2015, but developed countries have more life expectancy than developing countries. 
 
 However, there is an unusual data point shown on the developing countries with life expectancy less than 40 years in 2010. From the data, we know that it is country Haiti, and the earthquake which happened in 2010 caused Haiti country's life expectancy drop rapidly.
+
+
+#### ______________________________________________________________________________
 
 ## World Map Visualization
 
@@ -699,9 +705,13 @@ ggplot(data=combined_means, aes(x=long, y=lat, group=group, fill=value)) +
   theme(panel.border=element_blank())
 ```
 
+#### ______________________________________________________________________________
+
 # Conclusion
 
 In summary, life expectancy was found to be significantly correlated with all numeric variables except population, and each of these variables differed in their average values between the developed and developing countries. This indicates that life expectancy is related to the status of a country, that being developed or developing. The developing countries were found to have an average life expectancy of 67.7 years and the developed countries to have a life expectancy of 78.7 years. Though all numeric variables except population size were found to be significantly correlated with life expectancy, income level, years of schooling, BMI, and prevalence of AIDS were those variables with the highest correlation coefficient, with Pearson's r values of 0.73, 0.75, 0.57, and -0.56, respectively. Thus, indicating that the higher the income level, level of education, and BMI of an individual, the longer the life expectancy is. Additionally, this indicates that the lower the prevalence of AIDS, the longer the life expectancy, which one would expect. Thus, the answer to our SMART question is that the health factors that influence life expectancy across the world include adult mortality rate, infant deaths, alcohol, percentage expenditure, hepatitis B cases, measles cases, BMI, under-five years old deaths, polio cases, total expenditure, diphtheria cases, HIV/AIDS cases, GDP, thinness in 1-19 year-olds and 5-9 year-olds, income and schooling. Throughout our exploratory data analysis we found that our smart question stayed consistent with each graph we analyzed and test we conducted. We found that health factors definitely affect life expectancy and were able to identify certain factors that correlated the most and would be most reliable to use when creating models. For future analysis and for building models it will be important to clean the data thoroughly and identify all instances of incorrect values. 
+
+#### ______________________________________________________________________________
 
 # References
 
