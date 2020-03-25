@@ -104,7 +104,7 @@ on life expectancy. An explanation of the different factors in this dataset are 
 
 Data Source: [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who)
 
- The relationship between 'Adult Mortality' and 'Life Expectancy' was ignored for the duration of this EDA due to the obviousness lack of information that would be gathered from further exlporing this. It is redundant information that as the adult mortality rate increased, the life expectancy would decrease. The other variables, however, are explored in further detail. 
+ The relationship between 'Adult Mortality' and 'Life Expectancy' was ignored for the duration of this EDA due to the obviousness lack of information that would be gathered from further exploring this. It is redundant information that as the adult mortality rate increased, the life expectancy would decrease. The other variables, however, are explored in further detail. 
 
 
 #### ______________________________________________________________________________
