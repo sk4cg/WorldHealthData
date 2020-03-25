@@ -38,7 +38,7 @@ detach_package = function(pkg, character.only = FALSE) { if(!character.only) { p
 
 #### ______________________________________________________________________________
 
-#### Introduction and explanation of the dataset
+# Introduction and explanation of the dataset
 
 The focus of project one for team Wasted Potential was to develop and answer a research-driven SMART question on a health-related dataset. Our SMART question for project one was to determine which of the given variables in our dataset exhibits a measurable effect on the life expectancy of different countries across the world.Through the course of this paper, we will explain what we know about this dataset, the limitations of our dataset, how information was gathered, what preprocessing steps and analysis was completed prior to our work on the dataset, the exploratory data analysis (EDA) we performed, and how our SMART question was answered. 
 
