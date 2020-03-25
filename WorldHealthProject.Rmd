@@ -40,8 +40,6 @@ detach_package = function(pkg, character.only = FALSE) { if(!character.only) { p
 
 # Introduction 
 
-## Ben's Part: Introduction, explanation of dataset and world map visualization explanation (current word count: **715**)
-
 The focus of project one for team Wasted Potential was to develop and answer a research-driven SMART question on a health-related dataset. Although we found the dataset on Kaggle, it is originally sourced from the Global Health Observatory (GHO) which is a data repository owned by the World Health Organization (WHO).  The dataset contains 2,938 observations spread over 22 variables that contribute to the overall health status of 193 countries. Our SMART question was to determine which of the given variables exhibits a measurable effect on the life expectancy of different countries. Explanations for what each of the variables represents is displayed below. [INSERT FIGURE]. It is important to note that the economic data for this dataset (i.e. total expenditure, GDP) was sourced from the United Nations website, as noted on Kaggle. As the author of the Kaggle webpage for the dataset writes, “It has been observed that in the past 15 years, there has been a huge development in health sector resulting in improvement of human mortality rates especially in the developing nations in comparison to the past 30 years. Therefore, in this project we have considered data from year 2000-2015 for 193 countries for further analysis” (Kumar Rajarshi, 2018). As explained later in this paper, there were a variety of missing and likely incorrect values for different countries. The dataset on Kaggle excludes lesser-known countries like Tonga, Togo and Cabo Verde, whose data was almost all missing or inaccurate. 
 For visualization, we constructed a world map to display the distribution of life expectancies across the world. Our world map graphic helps visualize the difference in life expectancy between developed and developing countries, as well as how life expectancy changes in countries over time. Our preprocessing for the world map consisted of adding levels and changing the names for different countries in our dataset to match what was present in ggplot2’s map_data. As explained on RDocumentation, the purpose of map_data is to “Easily turn data from the maps package in to a data frame suitable for plotting with ggplot2” (Hadley Wickham, n.d.). The following code was written to organize all existing countries and their data into a data frame:
 world_data <- map_data('world')
@@ -50,17 +48,21 @@ Once levels were added to account for eighteen different country name mismatches
 
 #### ______________________________________________________________________________
 
-## [__________]'s Part: [______] (current word count: **_____**)
+
 
 Life expectancy is a summary of the overall mortality level of a given population. The reported life expectancy reflects that mortality pattern that exists across all age groups in the current year. In 2016, the global life expectancy was 72 years old, with female values reporting roughly 4 years longer than males. What was particularly interesting was the wide range of values by location that encompassed that overall 72 years old value. In that year the reported values ranged from 61.2 years old in the WHO African region to 77.5 years old in the WHO European Region (taken from statistics on who.int site), a gap that is about 16 years in size. These values highlight the huge inequality in how health is distributed around the world. It pushed us to question what differing factors could have affected the trends in mortality so drastically across the globe? We found a public dataset from Kaggle ("Life Expectancy (WHO): Statistical Analysis on factors influencing Life Expectancy") that provided 2,938 observations across 22 variables. The variables ranges from health factors such as BMI and immunizations to population factors such as developing status and GDP (Gross Domestic Product per capita). The data was collected from the World Health Organization (WHO) website and the United Nations website and then posted on Kaggle where we discovered it. We utilized a combination of decriptive graphs and tests to explore our data and given variables. Our Exploratory Data Analysis will be useful in identifying key factors that can aid in building models to predict future life expectancy values.  
 
 #### ______________________________________________________________________________
 
+## Ben's Part: Introduction, explanation of dataset and world map visualization explanation (current word count: **715**)
+
+## RyeAnne's Part: Correlation, Significance of Correlated Variables, Association of Life Expectancy with Factor Variables, Differences in Variables Between Developed and Developing Countries, Part of the Conclusion (current word count: **940**)
+
+## [__________]'s Part: [______] (current word count: **_____**)
+
 ## [__________]'s Part: [______] (current word count: **_____**)
 
 #### ______________________________________________________________________________
-
-## [__________]'s Part: [______] (current word count: **_____**)
 
 # Summary of The Dataset
 
@@ -167,7 +169,7 @@ qqline(life$Life.expectancy)
 
 
 
-### Descriptive Statistics
+## Descriptive Statistics
 ```{r stats}
 #sapply(life, mean, na.rm=TRUE) # excluding missing values
 #sapply(life, sd)
@@ -175,7 +177,7 @@ summary(life)
 ```
 
 
-## Initial Correlation
+## Correlation
 
 To determine the relationship between numerical variables and 'Life Expectancy', a correlation was performed. The variables "Country" and "Status" were removed prior to performing the correlation, as they are factor variables and will be addressed later. Additionally, rows that were blank or had "NA" in them were ignored, as array sized must be equivalent to perform a correlation between variables. 
 
@@ -194,7 +196,7 @@ corrplot(cor_life, type="lower") #plot correlation matrix
 The resulting correlation matrix can be viewed above. It was found that the top 5 variables correlated with 'Life Expectancy' were 'Adult Mortality', 'Income Composition of Resources', 'Schooling', 'HIV/AIDS', and 'BMI'. The correlation coefficients for these variables were -0.70, 0.73, 0.75, -0.56, and 0.57, respectively. The negative value in front of the correlations for 'Adult Mortality' and 'HIV/AIDS' indicates that as the life expectancy increases, the adult mortality and incidence of AIDS decreases. It is important to note that the variable 'Population' had virtually no correlation with 'Life Expectancy', as it had a correlation coefficient of -0.02.
 
 
-## Significance of Correlated Variables
+### Significance of Correlated Variables
 
 The level of significance for all numerical variables was found using the cor.test function. All numerical variables were found to be significantly correlated to life expectancy except population, which had a correlation coefficient of -0.02 and a p-value of 0.30. All other numerical variables had p-values of less than 2x10e-16. A table of the correlation coefficients and p-values is shown below. 
 
@@ -246,7 +248,7 @@ kable(cor_table, caption="Test of Significant Correlation Results")
 
 
 
-### Comparison of Life Expectancy and Expenditure 
+## Comparison of Life Expectancy and Expenditure 
 
 Two interesting variables we wanted to take a closer look at in our initial exploration of this dataset involved the relationship between spendign money and life expectancy. There were two variables: percentage expenditure and total expenditure, and it is important to highlight their differences in order to clarify the perspectives they may provide. Percentage expenditure refers to the expenditure on health as a percentage of GDP (Gross Domestic Product) per capita for the given year whereas total expenditure refers to the government's expediture on healthcare as a percentage of the total government spending for that given year. We initially thought that if we looked at total expenditure, we would see a clear trend as it could make sense that the more the government spends on healthcare should translate to overall better health outhcomes and thus higher life expectancy. But as we can see from the scatterplot graph "Life Expectancy (y) vs. Govt Healthcare Expenditure(x)" below we see no discernable positive or negative relationship between the data points. 
 
@@ -300,7 +302,7 @@ ggplot(life, aes(x=Schooling, y=Life.expectancy)) +
 ```
 
 
-## Association of Life Expectancy with Factor Variables
+### Association of Life Expectancy with Factor Variables
 
 Earlier, a correlation was performed to determine whether a relationship existed between 'life expectancy' and the numerical variables. Here, the factor variable 'Status' will be explored to determine whether the Status of a country results in differing life expectancies.
 The factor variables that were removed earlier were 'Country' and 'Status'. The 'Status' was that of countries that were 'Developed' and 'Developing'. To determine whether a country's life expectancy was different for 'Developed' versus 'Developing' countries, a t-test was performed. It was found that the average life expectancy in the developed countries was 78.7 years of age and that in the developing countries was 67.7 years. The t-test results found the mean life expectancy to be significantly different, with a p-value of less than 2e-16.
@@ -351,6 +353,8 @@ legend("topright", legend=c("Developing","Developed"), col=c(rgb(1,0,0,0.5),
 
 The first histogram shows the actual count of how many countries falling at each bin of life expectancy years. As can be shown, there is a far greater amount of developing countries than developed. The second histogram shows the proportion of each group (developed vs. developing) falling at each life expectancy bin. Both graphs indicate that the developed countries have a higher life expectancy than the developing. This further illustrates the difference in average life expectancy between developing countries and developed. 
 
+## Difference in Variables Between Developed and Developing Countries
+
 ```{r ttestofvarDev, results=FALSE}
 #t-test of developed vs developing of variables found to have significantly high correlations with Life Expectancy
 ttest_income = t.test(life_developed$Income.composition.of.resources, life_developing$Income.composition.of.resources)
@@ -358,27 +362,65 @@ ttest_school = t.test(life_developed$Schooling, life_developing$Schooling)
 ttest_BMI = t.test(life_developed$BMI, life_developing$BMI)
 ttest_AIDS = t.test(life_developed$HIV.AIDS, life_developing$HIV.AIDS)
 
+ttest_GDP = t.test(life_developed$GDP, life_developing$GDP)
+ttest_Alcohol = t.test(life_developed$Alcohol, life_developing$Alcohol)
+ttest_expend = t.test(life_developed$percentage.expenditure, life_developing$percentage.expenditure)
+ttest_thin19 = t.test(life_developed$thinness..1.19.years, life_developing$thinness..1.19.years)
+ttest_thin5 = t.test(life_developed$thinness.5.9.years, life_developing$thinness.5.9.years)
+
+ttest_polio = t.test(life_developed$Polio, life_developing$Polio)
+ttest_dip = t.test(life_developed$Diphtheria, life_developing$Diphtheria)
+
+ttest_infantdeath = t.test(life_developed$infant.deaths, life_developing$infant.deaths)
+ttest_hep = t.test(life_developed$Hepatitis.B, life_developing$Hepatitis.B)
+ttest_measles = t.test(life_developed$Measles, life_developing$Measles)
+ttest_under5 = t.test(life_developed$under.five.deaths, life_developing$under.five.deaths)
+ttest_totalespend = t.test(life_developed$Total.expenditure, life_developing$Total.expenditure)
+
 
 ttest_income
 ttest_school
 ttest_BMI
 ttest_AIDS
 
+ttest_GDP
+ttest_Alcohol
+ttest_expend 
+ttest_thin19 
+ttest_thin5 
+
+
+ttest_polio
+ttest_dip
+
+ttest_infantdeath
+ttest_hep
+ttest_measles
+ttest_under5
+ttest_totalespend
+
+
 
 ```
 
-## Difference in Variable Between Developed and Developing Countries
+
+
+For each variable that was found to be significantly correlated (p-value less than 0.05) to the life expectancy, the difference in means was tested between the developed and developing countries. As stated previously, all numerical values except for population size was found to be significantly correlated to life expectancy. 
+Similarly, the means of each of these variables was found to be significantly different, as well. The results of the t-tests can be found in the table below. The variable 'population' was not tested, as data was collected for the same years for both the developing and developed countries. Thus, the average year of data collection would be the same and no insight would be gained from this. 
 
 ```{r t-test table, results='asis'}
 #Correlation of variables table
-ttest_table = matrix(c("0.836", "0.596", "<2e-16", "0.15.6", "11.5", "<2e-16", "52.3", "35.7", "<2e-16", "0.10", "2.31", "<2e-16"), ncol=3, byrow=TRUE)
+ttest_table = matrix(c("0.836", "0.596", "<2e-16", "15.6", "11.5", "<2e-16", "52.3", "35.7", "<2e-16", "0.10", "2.31", "<2e-16", "18977", "3259", "<2e-16", "10.44", "3.52", "<2e-16", "2657", "362", "<2e-16", "1.44", "5.44", "<2e-16", "1.46", "5.50", "<2e-16", "94.5", "81.7", "<2e-16", "94.6", "82.4", "<2e-16", "0.872", "38.002", "<2e-16", "87.9", "77.7", "8e-12", "475", "2525", "1e-10", "1.09", "51.64", "<2e-16", "7.02", "5.77", "2e-11"), ncol=3, byrow=TRUE)
 colnames(ttest_table)=c("Mean Value Developed", "Mean Value Developing", "P-value")
-rownames(ttest_table)=c("Income level, from 0 to 1", "Years of Schooling", "BMI", "AIDS, per 1000 people")
+rownames(ttest_table)=c("Income level, from 0 to 1", "Years of Schooling", "BMI", "AIDS, per 1000 people", "Gross Domestic Product per Capita", "Alcohol in liters/capita", "% Government Expenditure", "Thinness 10-19 yo, % prevalence", "Thinness 5-9 yo, % prevalence", "Polio, % immunization coverage or 1 yo", "Diphtheria, % immunization coverage or 1 yo", "Infant Deaths, per 1000 people", "Hepatitis B, % immunization coverage or 1 yo", "Measles, per 1000 people", "Under Age 5 Deaths, per 1000 people", "Total Government Expenditure")
 
 library(knitr)
 kable(ttest_table, caption="T-test Between Developed and Developing Countries for Variables Highly Correlated to Life Expectancy")
 
 ```
+
+There are many takeaways from table above. First, are the factors that attribute to the health of the individuals in the developed versus developing countries. The immunization levels of the developed countries is higher, by over 10%, than the developing countries for each of the major diseases listed; Polio, Diphtheria, and Hepatitis B. For diseases in which there is no vaccine, the incidence rates per 1000 people is much higher, as can be seen for Measles and AIDS. Additionally, the prevalence of thinness in the developing countries is much higher, with the average BMI being lower. These factors likely attribute to the higher death rates for children and infants depicted above. 
+In the developed countries, the level of education is over 4 years longer than the developed, which may lead to the higher level of income seen in the developed countries. It can also be seen that the government expenditure, whether you are referring to total expenditure or percentage, is much higher in the developed countries. This could lead one to believe that life expectancy could potentially be extended with higher levels of government aid. 
 
 ## Is Life Expectancy Increasing?
 
@@ -647,6 +689,9 @@ ggplot(data=combined_means, aes(x=long, y=lat, group=group, fill=value)) +
 ```
 
 # Conclusion
+
+In summary, life expectancy was found to be significantly correlated with all numeric variables except population, and each of these variables differed in their average value between the developed and developing countries. This indicates that life expectancy is related to the status of a country, that being developed or developing. The developing countries were found to have an average life expectancy of 67.7 years and the developed countries to have a life expectancy of 78.7 years. Though all numeric variables except population size were found to be significantly correlated with life expectancy, income level, years of schooling, BMI, and prevalence of AIDS were those variables with the highest correlation coefficient, with Pearson's r values of 0.73, 0.75, 0.57, and -0.56, respectively. Thus, indicating that the higher the income level, level of education, and BMI of an individual, the longer the life expectancy is. Additionally, this indicates that the lower the prevalence of AIDS, the longer the life expectancy, which one would expect. 
+
 
 # References
 
