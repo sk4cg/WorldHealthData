@@ -40,38 +40,11 @@ detach_package = function(pkg, character.only = FALSE) { if(!character.only) { p
 
 # Introduction and explanation of the dataset
 
-The focus of project one for team Wasted Potential was to develop and answer a research-driven SMART question on a health-related dataset. Our SMART question for
-project one was to determine which of the given variables in our dataset exhibits a measurable effect on the life expectancy of different countries across the world.
-Through the course of this paper, we will explain what we know about this dataset, the limitations of our dataset, how information was gathered, what preprocessing
-steps and analysis was completed prior to our work on the dataset, the exploratory data analysis (EDA) we performed, and how our SMART question was answered. 
+The focus of project one for team Wasted Potential was to develop and answer a research-driven SMART question on a health-related dataset. Our SMART question for project one was to determine which of the given variables in our dataset exhibits a measurable effect on the life expectancy of different countries across the world.Through the course of this paper, we will explain what we know about this dataset, the limitations of our dataset, how information was gathered, what preprocessing steps and analysis was completed prior to our work on the dataset, the exploratory data analysis (EDA) we performed, and how our SMART question was answered. 
 
-The dataset Wasted Potential chose was “Life Expectancy (WHO): Statistical Analysis on factors influencing Life Expectancy.” Although we found this dataset on
-Kaggle, it was originally sourced from the Global Health Observatory (GHO) which is a data repository owned by the World Health Organization (WHO). While the
-original dataset from GHO contains many more variables and observations, the cleaned Kaggle dataset that we used for our project contains 2,938 observations spread
-over 22 variables that contribute to assessing the overall health status of 193 countries. Kumar Rajarshi, the author of the Kaggle dataset, noted several
-preprocessing and analysis steps taken to polish the original dataset from GHO. The original dataset showed some missing values, which were handled in R software
-using the Missmap command. Missmap indicated that most of the missing data was for population, Hepatitis B and GDP in lesser-known countries like Vanuatu, Tonga,
-Togo, and Cabo Verde. Kumar explained that finding year-specific data for these countries was very difficult; the lesser-known countries were ultimately excluded
-from the dataset. Additionally, Kumar noted that of the many variables in the original dataset from GHO, only the most critical health-related factors were chosen to
-be included in their Kaggle dataset. Thus, the final set of variables in this dataset range from health factors such as BMI and immunizations to population factors
-such as developing status and GDP (Gross Domestic Product per capita). An explanation of the years this dataset covers is as follows: “It has been observed that in
-the past 15 years, there has been a huge development in health sector resulting in improvement of human mortality rates especially in the developing nations in
-comparison to the past 30 years. Therefore, in this project we have considered data from year 2000-2015 for 193 countries for further analysis” (Kumar Rajarshi,
-2018). Thus, our dataset only encompasses health data in the years 2000-2015. Kumar noted that the economic data for this dataset (i.e. GDP, total expenditure) was
-sourced from the United Nations website. 
+The dataset Wasted Potential chose was “Life Expectancy (WHO): Statistical Analysis on factors influencing Life Expectancy.” Although we found this dataset on Kaggle, it was originally sourced from the Global Health Observatory (GHO) which is a data repository owned by the World Health Organization (WHO). While the original dataset from GHO contains many more variables and observations, the cleaned Kaggle dataset that we used for our project contains 2,938 observations spread over 22 variables that contribute to assessing the overall health status of 193 countries. Kumar Rajarshi, the author of the Kaggle dataset, noted several preprocessing and analysis steps taken to polish the original dataset from GHO. The original dataset showed some missing values, which were handled in R software using the Missmap command. Missmap indicated that most of the missing data was for population, Hepatitis B and GDP in lesser-known countries like Vanuatu, Tonga, Togo, and Cabo Verde. Kumar explained that finding year-specific data for these countries was very difficult; the lesser-known countries were ultimately excluded from the dataset. Additionally, Kumar noted that of the many variables in the original dataset from GHO, only the most critical health-related factors were chosen to be included in their Kaggle dataset. Thus, the final set of variables in this dataset range from health factors such as BMI and immunizations to population factors such as developing status and GDP (Gross Domestic Product per capita). An explanation of the years this dataset covers is as follows: “It has been observed that in the past 15 years, there has been a huge development in health sector resulting in improvement of human mortality rates especially in the developing nations in comparison to the past 30 years. Therefore, in this project we have considered data from year 2000-2015 for 193 countries for further analysis” (Kumar Rajarshi, 2018). Thus, our dataset only encompasses health data in the years 2000-2015. Kumar noted that the economic data for this dataset (i.e. GDP, total expenditure) was sourced from the United Nations website. 
 
-Because life expectancy is our response variable and the target of our SMART question, it is important to explain what life expectancy is and how it is recorded in
-this dataset. Life expectancy is a summary of the overall mortality level of a given population. The reported life expectancy reflects the mortality pattern that
-exists across all age groups in a current year. For example, in 2016, the global life expectancy was 72 years old, with female values reporting roughly 4 years
-longer than males. What was particularly interesting about this statistic was the wide range of values that made up the global life expectancy and how they differed
-by location. In 2016, the reported values ranged from 61.2 years old in the WHO African region to 77.5 years old in the WHO European Region (taken from statistics on
-who.int site); this gap is over 16 years in size! These values highlight the huge inequality in how health is distributed around the world. For our project, we
-utilized a combination of descriptive graphs and tests to explore our data and variables. Our EDA will be useful in identifying key factors that can aid in building
-models to predict future life expectancy values. Additionally, as explained in our presentation and later in this paper there were a variety of missing and likely 
-incorrect values for different countries. While the dataset on Kaggle excludes data for lesser-known countries like Tonga, Togo and Cabo Verde, there are still 
-incorrect or missing values for multiple countries. For example, the population of Afghanistan in 2014 was recorded as 327,582, while online sources record the 
-population in that year to be 32.76 million. The inaccuracy and absence of a variety of values, combined with the limited range of years (2000-2015) comprise the 
-limitations of our dataset. 
+Because life expectancy is our response variable and the target of our SMART question, it is important to explain what life expectancy is and how it is recorded in this dataset. Life expectancy is a summary of the overall mortality level of a given population. The reported life expectancy reflects the mortality pattern that exists across all age groups in a current year. For example, in 2016, the global life expectancy was 72 years old, with female values reporting roughly 4 years longer than males. What was particularly interesting about this statistic was the wide range of values that made up the global life expectancy and how they differed by location. In 2016, the reported values ranged from 61.2 years old in the WHO African region to 77.5 years old in the WHO European Region (taken from statistics on who.int site); this gap is over 16 years in size! These values highlight the huge inequality in how health is distributed around the world. For our project, we utilized a combination of descriptive graphs and tests to explore our data and variables. Our EDA will be useful in identifying key factors that can aid in building models to predict future life expectancy values. Additionally, as explained in our presentation and later in this paper there were a variety of missing and likely  incorrect values for different countries. While the dataset on Kaggle excludes data for lesser-known countries like Tonga, Togo and Cabo Verde, there are still  incorrect or missing values for multiple countries. For example, the population of Afghanistan in 2014 was recorded as 327,582, while online sources record the population in that year to be 32.76 million. The inaccuracy and absence of a variety of values, combined with the limited range of years (2000-2015) comprise the limitations of our dataset. 
 
 #### ______________________________________________________________________________
 
@@ -131,7 +104,7 @@ on life expectancy. An explanation of the different factors in this dataset are 
 
 Data Source: [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who)
 
- The relationship between 'Adult Mortality' and 'Life Expectancy' was ignored for the duration of this EDA due to the obviousness lack of information that would be gathered from further exloring this. It is redundent information that as the adult mortality rate increased, the life expectancy would decrease. The other variables, however, are explored in further detail. 
+ The relationship between 'Adult Mortality' and 'Life Expectancy' was ignored for the duration of this EDA due to the obviousness lack of information that would be gathered from further exploring this. It is redundant information that as the adult mortality rate increased, the life expectancy would decrease. The other variables, however, are explored in further detail. 
 
 
 #### ______________________________________________________________________________
@@ -139,8 +112,9 @@ Data Source: [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who)
 
 # Problems with the Data 
 
-As we were beginning our analysis of the dataset, we noticed some unusual values in some graphs and statistics. For instance, the "percentage expenditure" variable is a reflection of the money spent on health as a percentage of GDP per capita, as such, the highest possible number a percent value can be in this context is 100%. However, we noticed that one of the data points showed 19480 as the percentage expediture for Switzerland which did not make sense. In addition, there was also a datapoint thatt showed China's percentage expediture as zero, which we also know is not true. In other instances such as for population values, we notices values in the thousands, when they should have been in the millions range. We believe that some of the discrepancies in the dataset were perhaps due to oweners hand entering values or improperly joining the data from the two different sources (from the WHO and the UN). We ultimately decided that we should not attempt to remove these values as we would have to manually identify discrepancies,  and since we are not creating linear models to make predictions it is not necessary at this point. For future analysis we would reccomend cleaning the dataset of these incorrect values before proceeding with creating models. 
+As we were beginning our analysis of the dataset, we noticed some unusual values in some graphs and statistics. For instance, the "percentage expenditure" variable is a reflection of the money spent on health as a percentage of GDP per capita, as such, the highest possible number a percent value can be in this context is 100%. However, we noticed that one of the data points showed 19480 as the percentage expenditure for Switzerland which did not make sense. In addition, there was also a datapoint that showed China's percentage expenditure as zero, which we also know is not true. In other instances such as for population values, we noticed values in the thousands, when they should have been in the millions range. We believe that some of the discrepancies in the dataset were perhaps due to owners hand entering values or improperly joining the data from the two different sources (from the WHO and the UN). We ultimately decided that we should not attempt to remove these values as we would have to manually identify discrepancies, and since we are not creating linear models to make predictions it is not necessary at this point. For future analysis we would recommend cleaning the dataset of these incorrect values before proceeding with creating models. 
 
+#### ______________________________________________________________________________
 
 # Life Expectancy EDA
 
@@ -179,7 +153,22 @@ qqline(life$Life.expectancy)
 #sapply(life, mean, na.rm=TRUE) # excluding missing values
 #sapply(life, sd)
 summary(life)
+
+#below is yuki's table
 ```
+
+
+The following table shows some variables' statistics values. For example, the life expectancy is from 36.3 to 89 years, and total government percentage expenditure is from 0.37 to 17.6. But as we mentioned before there exists some data problems for _GDP_ and _Percentage Expenditure_ like the minimun value for _GDP_ is 2 which does not make sense. The maximum/mean value for _Percentage Expenditure_ is 19480 and 738 respectively which we know it is not true because it is in percentage unit.
+
+
+|        | Life Expectancy (Years) | Total Gov Expenditure (%) | GDP (USD/Capita) | Percentage  Expenditure (%) | HIV/AIDS (Death/1000) | Schooling (Years) |
+|:------:|:-----------------------:|:-------------------------:|:----------------:|:---------------------------:|:---------------------:|:-----------------:|
+| Mean   |           69.2          |            5.94           |       7483       |             738             |          1.7          |         12        |
+| Median |           72.1          |            5.75           |       1767       |              65             |          0.1          |        12.3       |
+| S.D.   |           9.52          |            2.5            |       14270      |             1988            |          5.08         |        3.36       |
+| Range  |       36.3 - 89.0       |        0.37 - 17.6        |    2 - 119173    |          0 - 19480          |       0.1 - 50.6      |      0 - 20.7     |
+
+
 
 
 ## Correlation
@@ -255,7 +244,7 @@ kable(cor_table, caption="Test of Significant Correlation Results")
 
 ## Comparison of Life Expectancy and Expenditure 
 
-Two interesting variables we wanted to take a closer look at in our initial exploration of this dataset involved the relationship between spendign money and life expectancy. There were two variables: percentage expenditure and total expenditure, and it is important to highlight their differences in order to clarify the perspectives they may provide. Percentage expenditure refers to the expenditure on health as a percentage of GDP (Gross Domestic Product) per capita for the given year whereas total expenditure refers to the government's expediture on healthcare as a percentage of the total government spending for that given year. We initially thought that if we looked at total expenditure, we would see a clear trend as it could make sense that the more the government spends on healthcare should translate to overall better health outhcomes and thus higher life expectancy. But as we can see from the scatterplot graph "Life Expectancy (y) vs. Govt Healthcare Expenditure(x)" below we see no discernable positive or negative relationship between the data points. 
+Two interesting variables we wanted to take a closer look at in our initial exploration of this dataset involved the relationship between spending money and life expectancy. There were two variables: percentage expenditure and total expenditure, and it is important to highlight their differences in order to clarify the perspectives they may provide. Percentage expenditure refers to the expenditure on health as a percentage of GDP (Gross Domestic Product) per capita for the given year whereas total expenditure refers to the government's expenditure on healthcare as a percentage of the total government spending for that given year. We initially thought that if we looked at total expenditure, we would see a clear trend as it could make sense that the more the government spends on healthcare should translate to overall better health outcomes and thus higher life expectancy. But as we can see from the scatterplot graph "Life Expectancy (y) vs. Govt Healthcare Expenditure(x)" below we see no discernable positive or negative relationship between the data points. 
 
 ```{r plots3}
 plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs. Govt Healthcare Expenditure(x) ", xlab="% Healthcare Expenditure (out of total Govt spending)", ylab="Life Expectancy (Age)", pch=19) +
@@ -268,9 +257,9 @@ plot(life$Total.expenditure, life$Life.expectancy, main=" Life Expectancy (y) vs
 #  ylab("Life Expectancy (Age)")
 ```
 
-The scatterplot below, "Per Capita Health Expediture (y) vs GDP (x)", shows a positive relationship between life expectancy and the amount of money spent on healthcare as a % of GDP per capita. This is more in line with our hypothesis that the more money spent on healthcare should result in better health outcomes and higher life expectancy ages.  However there were some data points spread on left corner of the graph which indicates there were lots of unusual datapoints with GDP approached to zero like Philippines and China. In addition, we could also see that the percentage expenditure with unusual values which approached to 20000 which it did not make sense as Switzerland taking as an example.
+The scatterplot below, "Per Capita Health Expenditure (y) vs GDP (x)", shows a positive relationship between life expectancy and the amount of money spent on healthcare as a % of GDP per capita. This is more in line with our hypothesis that the more money spent on healthcare should result in better health outcomes and higher life expectancy ages.  However, there were some data points spread on left corner of the graph which indicates there were lots of unusual datapoints with GDP approached to zero like Philippines and China. In addition, we could also see that the percentage expenditure with unusual values which approached to 20000 which it did not make sense as Switzerland taking as an example.
 
-It seems that the difference between the graph below and the graph above is indicating that different amounts of government spending does not have a great effect but the overall amount that citizens are willing to spend will be more indicative of greater life expectancy. One hypothesis is that no matter how much the government is willing to spend or not spend on their citizens, each person will do their best to supplement the amount given to them with the sufficient fundign to meet ttheir healthcare needs, this could be studied further with more quantitative spending data instead of just percentages.  
+It seems that the difference between the graph below and the graph above is indicating that different amounts of government spending does not have a great effect but the overall amount that citizens are willing to spend will be more indicative of greater life expectancy. One hypothesis is that no matter how much the government is willing to spend or not spend on their citizens, each person will do their best to supplement the amount given to them with the sufficient funding to meet their healthcare needs, this could be studied further with more quantitative spending data instead of just percentages.  
 
 ```{r plots4, include=T}
 ggplot(life, aes(x=GDP, y=percentage.expenditure)) + 
@@ -296,7 +285,7 @@ ggplot(life, aes(x=HIV.AIDS, y=Life.expectancy)) +
 ```
 
 
-The scatterplot below, "Life Expectancy (y) vs Years of Schooling (x)", shows a slightly possitive trend on life expectancy versus years of schooling. As years of schooling increased, people's educated level increasd and they could have better life quality so that their life expectancy will finaly raise.
+The scatterplot below, "Life Expectancy (y) vs Years of Schooling (x)", shows a slightly positive trend on life expectancy versus years of schooling. As years of schooling increased, people's educated level increased and they could have better life quality so that their life expectancy will finally raise.
 
 ```{r plots6, include=T}
 ggplot(life, aes(x=Schooling, y=Life.expectancy)) + 
@@ -360,7 +349,7 @@ legend("topright", legend=c("Developing","Developed"), col=c(rgb(1,0,0,0.5),
 
 The first histogram shows the actual count of how many countries falling at each bin of life expectancy years. As can be shown, there is a far greater amount of developing countries than developed. The second histogram shows the proportion of each group (developed vs. developing) falling at each life expectancy bin. Both graphs indicate that the developed countries have a higher life expectancy than the developing. This further illustrates the difference in average life expectancy between developing countries and developed. 
 
-## Difference in Variables Between Developed and Developing Countries
+### Difference in Variables Between Developed and Developing Countries
 
 ```{r ttestofvarDev, results=FALSE}
 #t-test of developed vs developing of variables found to have significantly high correlations with Life Expectancy
@@ -429,6 +418,8 @@ kable(ttest_table, caption="T-test Between Developed and Developing Countries fo
 There are many takeaways from table above. First, are the factors that attribute to the health of the individuals in the developed versus developing countries. The immunization levels of the developed countries is higher, by over 10%, than the developing countries for each of the major diseases listed; Polio, Diphtheria, and Hepatitis B. For diseases in which there is no vaccine, the incidence rates per 1000 people is much higher, as can be seen for Measles and AIDS. Additionally, the prevalence of thinness in the developing countries is much higher, with the average BMI being lower. These factors likely attribute to the higher death rates for children and infants depicted above. 
 In the developed countries, the level of education is over 4 years longer than the developed, which may lead to the higher level of income seen in the developed countries. It can also be seen that the government expenditure, whether you are referring to total expenditure or percentage, is much higher in the developed countries. This could lead one to believe that life expectancy could potentially be extended with higher levels of government aid. 
 
+#### ______________________________________________________________________________
+
 ## Is Life Expectancy Increasing?
 
 ```{r Over the Years, include=T}
@@ -444,22 +435,14 @@ This above graph shows the average life expectancy with respective of developed 
 
 However, there is an unusual data point shown on the developing countries with life expectancy less than 40 years in 2010. From the data, we know that it is country Haiti, and the earthquake which happened in 2010 caused Haiti country's life expectancy drop rapidly.
 
-#### World Map Visualization
 
-Earlier in this paper, an example statistic was given to illustrate the disparity in life expectancy by location. For the purpose of visualization, we constructed a 
-world map to display the distribution of life expectancies in different countries. Our world map graphic helps visualize the difference in life expectancy between 
-developed and developing countries, as well as how life expectancy changes in countries over time. To create the world map, we used ggplot2’s map_data function. The 
-purpose of map_data is to transform data from the maps package into a data frame so that country data may be plotted. For our world map, we used map_data with the 
-map ‘world’ to store world data in a data frame which we called world_data. 
+#### ______________________________________________________________________________
 
-Our preprocessing for the world map consisted of adding levels and changing the names for different countries in our dataset to match what was present in ggplot2’s 
-map_data. In order to plot data on a world map, you must have columns for latitude and longitude, which effectively serve as the axes for plotting. Our dataset did 
-not contain latitude-longitude data, but world_data does. Thus, we used the match function to merge our data set and world_data together to create a data frame 
-suitable for plotting. However, the match function effectively performs an inner join, and because we are performing a merge on the country column, the names of the 
-countries must match in order to preserve data during the merge. However, the naming convention used in world_data differed from our dataset. For example, in our 
-dataset the United States is titled “United States of America,” but in world_data it is titled “USA.” If we perform a merge, all the data for United States of 
-America would be lost because there is no such country in world_data. However, by adding levels to our dataset to change the country names to match what is present 
-in world_data we will end up with a data frame containing all countries, their data, and their respective latitude-longitude coordinates for plotting.
+## World Map Visualization
+
+Earlier in this paper, an example statistic was given to illustrate the disparity in life expectancy by location. For the purpose of visualization, we constructed a world map to display the distribution of life expectancies in different countries. Our world map graphic helps visualize the difference in life expectancy between developed and developing countries, as well as how life expectancy changes in countries over time. To create the world map, we used ggplot2’s map_data function. The purpose of map_data is to transform data from the maps package into a data frame so that country data may be plotted. For our world map, we used map_data with the map ‘world’ to store world data in a data frame which we called world_data. 
+
+Our preprocessing for the world map consisted of adding levels and changing the names for different countries in our dataset to match what was present in ggplot2’s map_data. In order to plot data on a world map, you must have columns for latitude and longitude, which effectively serve as the axes for plotting. Our dataset did not contain latitude-longitude data, but world_data does. Thus, we used the match function to merge our data set and world_data together to create a data frame suitable for plotting. However, the match function effectively performs an inner join, and because we are performing a merge on the country column, the names of the countries must match in order to preserve data during the merge. However, the naming convention used in world_data differed from our dataset. For example, in our dataset the United States is titled “United States of America,” but in world_data it is titled “USA.” If we perform a merge, all the data for United States of America would be lost because there is no such country in world_data. However, by adding levels to our dataset to change the country names to match what is present in world_data we will end up with a data frame containing all countries, their data, and their respective latitude-longitude coordinates for plotting.
 
 ```{r subsetting, include=T}
 data <- read.csv("lifeexpectancydata.csv")
@@ -505,19 +488,12 @@ data_world_map$Country[data_world_map$Country == 'Viet Nam'] <- 'Vietnam'
 two_thousand <- subset(x=data_world_map, data_world_map$Year==2000)
 ```
 
-Once levels were added to account for eighteen different country name mismatches, the world map was constructed using ggplot2. It is important to note that to 
-display the life expectancy to visualize the difference between developed and developing countries, the mean life expectancy across all years for each country 
-(2000-2015) was computed and displayed. By using the mean value, we can get an accurate general sense of how life expectancy differs by location. For the graphic 
-that displays trends in life expectancy changes across the years, every five years between 2000 and 2015 was graphed. The reasoning for printing only four graphs was
-because printing out sixteen different graphs is useless and arguably harder to visualize differences between the years due to such small year-to-year changes in 
-life expectancy. The result of this world map visualization is that the gap in average life expectancy between developed and developing countries is about ten to 
-fifteen years, which is astounding. This data reassured us that the status of a country has a profound correlation with its life expectancy. However, the status of a
-country carries several other factors with it (i.e. GDP, population and disease levels) which are likely the more measurable contributors to the value of life 
-expectancy.
+Once levels were added to account for eighteen different country name mismatches, the world map was constructed using ggplot2. It is important to note that to display the life expectancy to visualize the difference between developed and developing countries, the mean life expectancy across all years for each country (2000-2015) was computed and displayed. By using the mean value, we can get an accurate general sense of how life expectancy differs by location. For the graphic that displays trends in life expectancy changes across the years, every five years between 2000 and 2015 was graphed. The reasoning for printing only four graphs was because printing out sixteen different graphs is useless and arguably harder to visualize differences between the years due to such small year-to-year changes in life expectancy. The result of this world map visualization is that the gap in average life expectancy between developed and developing countries is about ten to fifteen years, which is astounding. This data reassured us that the status of a country has a profound correlation with its life expectancy. However, the status of a country carries several other factors with it (i.e. GDP, population and disease levels) which are likely the more measurable contributors to the value of life expectancy.
 
-### Combining and plotting LE data from the year 2000
 
 ```{r combining_2000, include=T}
+### Combining and plotting LE data from the year 2000
+
 loadPkg("ggmap")
 loadPkg("tidyverse")
 loadPkg("dplyr")
@@ -547,9 +523,9 @@ ggplot(data=combined_2000, aes(x=long, y=lat, group=group, fill=value)) +
   theme(panel.border=element_blank())
 ```
 
-### Combining and plotting LE data from the year 2005
 
 ```{r combining_2005, include=T}
+### Combining and plotting LE data from the year 2005
 loadPkg("ggmap")
 loadPkg("tidyverse")
 loadPkg("dplyr")
@@ -579,9 +555,10 @@ ggplot(data=combined_2005, aes(x=long, y=lat, group=group, fill=value)) +
   theme(panel.border=element_blank())
 ```
 
-### Combining and plotting LE data from the year 2010
 
 ```{r combining_2010, include=T}
+
+### Combining and plotting LE data from the year 2010
 loadPkg("ggmap")
 loadPkg("tidyverse")
 loadPkg("dplyr")
@@ -610,9 +587,11 @@ ggplot(data=combined_2010, aes(x=long, y=lat, group=group, fill=value)) +
   scale_x_continuous(breaks=c()) +
   theme(panel.border=element_blank())
 ```
-### Combining and plotting LE data from the year 2015
+
 
 ```{r combining_2015, include=T}
+
+### Combining and plotting LE data from the year 2015
 loadPkg("ggmap")
 loadPkg("tidyverse")
 loadPkg("dplyr")
@@ -642,9 +621,11 @@ ggplot(data=combined_2015, aes(x=long, y=lat, group=group, fill=value)) +
   theme(panel.border=element_blank())
 ```
 
-### Subsetting and Pre-processing for Mean Life Expectancy
+
 
 ```{r aggregates, include=T}
+### Subsetting and Pre-processing for Mean Life Expectancy
+
 loadPkg("dplyr")
 
 data_le_means <- data.frame(data)
@@ -692,7 +673,7 @@ le_clean = anti_join(data_le_means, le_na)
 country_and_status <- le_clean %>% group_by(Country, Status) %>% summarise(mean_le = mean(Life.expectancy))
 ```
 
-## Combining and Plotting Mean LE across all years
+#### Combining and Plotting Mean LE across all years
 
 ```{r combining_means, include=T}
 loadPkg("ggmap")
@@ -724,20 +705,13 @@ ggplot(data=combined_means, aes(x=long, y=lat, group=group, fill=value)) +
   theme(panel.border=element_blank())
 ```
 
+#### ______________________________________________________________________________
+
 # Conclusion
 
-In summary, life expectancy was found to be significantly correlated with all numeric variables except population, and each of these variables differed in their 
-average value between the developed and developing countries. This indicates that life expectancy is related to the status of a country, that being developed or 
-developing. The developing countries were found to have an average life expectancy of 67.7 years and the developed countries to have a life expectancy of 78.7 years.
-Though all numeric variables except population size were found to be significantly correlated with life expectancy, income level, years of schooling, BMI, and 
-prevalence of AIDS were those variables with the highest correlation coefficient, with Pearson's r values of 0.73, 0.75, 0.57, and -0.56, respectively. Thus, 
-indicating that the higher the income level, level of education, and BMI of an individual, the longer the life expectancy is. Additionally, this indicates that the 
-lower the prevalence of AIDS, the longer the life expectancy, which one would expect. Thus, the answer to our SMART question is that the health factors that 
-influence life expectancy across the world include adult mortality rate, infant deaths, alcohol, percentage expenditure, hepatitis B cases, measles cases, BMI, 
-under-five years old deaths, polio cases, total expenditure, diphtheria cases, HIV/AIDS cases, GDP, thinness in 1-19 year-olds and 5-9 year-olds, income and 
-schooling.Throughout our exploratory data anlysis we found that our smart question stayed consistent with each graph we analyzed and test we conducted. We found 
-that health factors definitely affect life expectancy and were able to identify certain factors that correlated the most and would be most reliable to use when
-creating models. For future analysis and for building models it will be important to clean the data thoroughly and identify all instances of incorrect values. 
+In summary, life expectancy was found to be significantly correlated with all numeric variables except population, and each of these variables differed in their average values between the developed and developing countries. This indicates that life expectancy is related to the status of a country, that being developed or developing. The developing countries were found to have an average life expectancy of 67.7 years and the developed countries to have a life expectancy of 78.7 years. Though all numeric variables except population size were found to be significantly correlated with life expectancy, income level, years of schooling, BMI, and prevalence of AIDS were those variables with the highest correlation coefficient, with Pearson's r values of 0.73, 0.75, 0.57, and -0.56, respectively. Thus, indicating that the higher the income level, level of education, and BMI of an individual, the longer the life expectancy is. Additionally, this indicates that the lower the prevalence of AIDS, the longer the life expectancy, which one would expect. Thus, the answer to our SMART question is that the health factors that influence life expectancy across the world include adult mortality rate, infant deaths, alcohol, percentage expenditure, hepatitis B cases, measles cases, BMI, under-five years old deaths, polio cases, total expenditure, diphtheria cases, HIV/AIDS cases, GDP, thinness in 1-19 year-olds and 5-9 year-olds, income and schooling. Throughout our exploratory data analysis we found that our smart question stayed consistent with each graph we analyzed and test we conducted. We found that health factors definitely affect life expectancy and were able to identify certain factors that correlated the most and would be most reliable to use when creating models. For future analysis and for building models it will be important to clean the data thoroughly and identify all instances of incorrect values. 
+
+#### ______________________________________________________________________________
 
 # References
 
